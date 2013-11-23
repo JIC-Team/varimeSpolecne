@@ -16,7 +16,7 @@ class Repository extends Nette\Object
 	}
 
 	/**
-     * Vrací objekt reprezentující databázovou tabulku.
+     * Return object representing database table
      * @return Nette\Database\Table\Selection
      * @author David Pohan
      */
@@ -27,7 +27,7 @@ class Repository extends Nette\Object
 	}
 
 	/**
-     * Vrací všechny řádky z tabulky.
+     * Returns all rows of table
      * @return Nette\Database\Table\Selection
      * @author David Pohan
      */
@@ -37,7 +37,7 @@ class Repository extends Nette\Object
 	}
 
 	/**
-     * Vrací řádky podle filtru, např. array('name' => 'John').
+     * Returns filtered rows, ex. array('name' => 'John').
      * @return Nette\Database\Table\Selection
      * @author David Pohan
      */
