@@ -40,4 +40,14 @@ class EventRepository extends Repository
 	{
 		return $this->findBy($by);
 	}
+
+	/**
+	 *
+	 * @return 
+	 * @author David Pohan
+	 */
+	public function approveAttendee($attendeeId, $approval)
+	{
+		$this->AttendeeRepository->isAttending($attendeeId, $approval);
+	}
 }
