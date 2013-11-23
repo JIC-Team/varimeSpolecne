@@ -46,8 +46,8 @@ class EventRepository extends Repository
 	 * @return 
 	 * @author David Pohan
 	 */
-	public function approveAttendee($attendeeId, $approval)
+	public function addPerson($userId, $add)
 	{
-		$this->AttendeeRepository->isAttending($attendeeId, $approval);
+		return $this->getTable()->where(array('user_id' => $userId))->update('people' => 'people'+$add);
 	}
 }
