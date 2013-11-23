@@ -1,6 +1,6 @@
 <?php
 
-use Nette;
+// use Nette;
 
 /**
 * Handles atendees
@@ -21,4 +21,6 @@ class AttendeeRepository extends Repository
 			'event_id' => $eventId,
 		));
 	}
+
+	
 }

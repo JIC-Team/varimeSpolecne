@@ -1,6 +1,6 @@
 <?php
 
-use Nette;
+// use Nette;
 
 /**
 * Provádí operace nad databázovou tabulkou.
@@ -44,5 +44,15 @@ class Repository extends Nette\Object
 	public function findBy(array $by)
 	{
 		return $this->getTable()->where($by);
+	}
+
+	/**
+	 *
+	 * @return 
+	 * @author David Pohan
+	 */
+	public function getDb()
+	{
+		return $this->connection;
 	}
 }

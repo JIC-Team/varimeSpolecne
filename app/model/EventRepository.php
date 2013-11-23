@@ -1,6 +1,6 @@
 <?php
 
-use Nette;
+// use Nette;
 
 /**
 * Event class
@@ -20,6 +20,9 @@ class EventRepository extends Repository
 	 */
 	public function createEvent($userId, $place, $food, $maxPeople, $title, $description)
 	{
+		/**
+		 * @todo userID
+		 */
 		return $this->getTable()->insert(array(
 			'date' => new \DateTime(),
 			'place' => $place,
@@ -46,8 +49,10 @@ class EventRepository extends Repository
 	 * @return 
 	 * @author David Pohan
 	 */
-	public function addPerson($userId, $add)
+	public function approvePerson($userId, $approvePerson)
 	{
-		return $this->getTable()->where(array('user_id' => $userId))->update('people' => 'people'+$add);
+		// return $this->getTable()->where(array('user_id' => $userId))->update('people' => 'people'+$add);
+		if($approvePerson)
+			return $this->getDb()->exec('UPDATE event SET people = people + 1 WHERE id = ?', $userId);
 	}
 }
