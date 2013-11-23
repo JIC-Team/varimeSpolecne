@@ -29,6 +29,9 @@ common:
 		routerFactory: RouterFactory
 		router: @routerFactory::createRouter
 
+		eventRepository: EventRepository
+		attendeeRepository: AttendeeRepository
+
 
 	factories:
 

@@ -5,7 +5,7 @@ use Nette;
 /**
 * Event class
 */
-class RepositoryEvent extends Repository
+class EventRepository extends Repository
 {
 	/**
 	 * Creates new event
