@@ -30,6 +30,12 @@ class AttendeeRepository extends Repository
 	 */
 	public function getAttendees($eventId)
 	{
-		return $this->findBy(array('event_id' => $eventId));
+		$names = array();
+		foreach($this->getTable()->where(array("event_id" => $eventId)) as $attendee) 
+		{
+			$names[] = $attendee->ref("user")->first_name;
+		}
+
+		return $names;
 	}	
 }

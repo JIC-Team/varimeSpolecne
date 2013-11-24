@@ -13,16 +13,14 @@ class EventPresenter extends BasePresenter
 	private $list;
 
 
-	public function inject(EventRepository $eventRepository, AttendeeRepository $attendeeRepository)
+	public function inject(AttendeeRepository $attendeeRepository)
 	{
 		parent::startup();
-		$this->eventRepository = $eventRepository;
-		$this->attendeeRepository = $attendeeRepository;
 	}
 
 	public function actionDefault($id)
 	{
-		$this->list = $this->eventRepository->findBy(array('id' => $id))->fetch();
+		$this->list = $this->context->eventRepository->findBy(array('id' => $id))->fetch();
 		// if($this->list === FALSE)
 		// 	$this->setView('Homepage:default');
 	}
@@ -32,8 +30,10 @@ class EventPresenter extends BasePresenter
 	 */
 	public function renderDefault()
 	{
+		$eventId = '3';
 		$this->template->list = $this->list;
-		$this->template->attendees = $this->attendeeRepository->getAttendees('3');
+		$this->template->attendees = $this->context->attendeeRepository->getAttendees($eventId);
+		$this->template->users = $this->context->userRepository->findAll();
 	}
 
 	public function createComponentEventForm()

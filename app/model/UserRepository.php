@@ -1,8 +1,5 @@
 <?php
 
-namespace Todo;
-use Nette;
-
 /**
  * Tabulka user
  */

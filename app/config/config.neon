@@ -31,6 +31,7 @@ common:
 
 		eventRepository: EventRepository
 		attendeeRepository: AttendeeRepository
+		userRepository: UserRepository
 
 
 	factories:
