@@ -11,7 +11,7 @@ class UserRepository extends Repository
       return $this->getTable()->where($by)->fetch();
   }  
   
-  public function registerUser($values)
+  public function registerUserDB($values)
   {
     return $this->getTable()->insert(array(
       'first_name' => $values->first_name,
@@ -19,12 +19,25 @@ class UserRepository extends Repository
       'password' => Authenticator::calculateHash($values->password),
       'email' => $values->email,
 			'date' => new \DateTime(),
-      'gender' => $values->gender,
+      'gender' => $values->gender
   	));
+  }
+  
+  public function registerUser(array $values)
+  {
+    $this->getTable()->insert($values);
   }
   
   public function updateUser(ActiveRow $user, array $values)
   {
       $user->update($values);
+  }
+  
+  public function createIdentity(ActiveRow $user)
+  {
+    $data = $user->toArray();
+    unset($user['password']);
+
+    return new \Nette\Security\Identity($user->id, NULL, $data);
   }
 }

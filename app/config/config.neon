@@ -6,6 +6,10 @@
 #
 common:
 	parameters:
+		facebook:
+			appId: '224014644407983'
+			secret: 'f5506268b4b28e60e39ae0e22b298692'
+
 
 	php:
 		date.timezone: Europe/Prague
@@ -31,6 +35,9 @@ common:
 
 		eventRepository: EventRepository
 		attendeeRepository: AttendeeRepository
+		userRepository: UserRepository
+		FacebookRepository: FacebookRepository
+		facebook: Facebook( {appId: %facebook.appId%, secret: %facebook.secret%} )
 
 
 	factories:

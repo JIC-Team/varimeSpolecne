@@ -52,7 +52,7 @@ class RegisterPresenter extends BasePresenter {
     
     public function registerFormSubmitted(UI\Form $form) {
         $values = $form->getValues();
-        $new_user_id = $this->userRepository->registerUser($values);
+        $new_user_id = $this->userRepository->registerUserDB($values);
         if($new_user_id){
             $this->flashMessage('Registrace se povedla!');
             $this->redirect('Sign:in');
