@@ -32,7 +32,7 @@ class RegisterPresenter extends BasePresenter {
         $form->addText('email', 'E-mail:', 35)
                 ->addRule(Form::FILLED, 'Vyplňte Váš email')
                 ->addRule(function($control) {
-                    if(($this->userRepository->existUserEmail($control->getValue()))>0){return false;}
+                    if($this->userRepository->findUser(array('email'=>$control->getValue()))){return false;}
                     else{return true;}
                 }, "Duplicitní email")
                 ->addCondition(Form::FILLED)
@@ -52,7 +52,7 @@ class RegisterPresenter extends BasePresenter {
     
     public function registerFormSubmitted(UI\Form $form) {
         $values = $form->getValues();
-        $new_user_id = $this->userRepository->register($values);
+        $new_user_id = $this->userRepository->registerUserDB($values);
         if($new_user_id){
             $this->flashMessage('Registrace se povedla!');
             $this->redirect('Sign:in');
