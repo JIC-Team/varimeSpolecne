@@ -54,7 +54,8 @@ class EventPresenter extends BasePresenter
 	{
 		$form = new Form();
 		$form->addText('place', 'Místo:');
-		$form->addText('maxPeople', 'Maximální počet lidí:');
+		$form->addText('maxPeople', 'Maximální počet lidí:')
+		->addRule(Form::INTEGER);
 		$form->addText('food', 'Jídlo:');
 		$form->addText('title', 'Název:');
 		$form->addText('description', 'Popis:');
