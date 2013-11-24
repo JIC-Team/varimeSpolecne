@@ -16,8 +16,8 @@ common:
 			errorPresenter: Error
 
 		database:
-			dsn: 'mysql:host=localhost;dbname=test'
-			user:
+			dsn: 'mysql:host=localhost;dbname=varimespolecne'
+			user: root
 			password:
 
 		session:
@@ -28,6 +28,9 @@ common:
 		authenticator: Authenticator
 		routerFactory: RouterFactory
 		router: @routerFactory::createRouter
+
+		eventRepository: EventRepository
+		attendeeRepository: AttendeeRepository
 
 
 	factories:
