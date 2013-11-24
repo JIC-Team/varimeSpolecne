@@ -13,9 +13,11 @@ class EventPresenter extends BasePresenter
 	private $list;
 
 
-	public function inject(AttendeeRepository $attendeeRepository)
+	public function startup()
 	{
 		parent::startup();
+		// if(!$this->getUser()->isLoggedIn())
+		// 	$this->redirect('Sign:in');
 	}
 
 	public function actionDefault($id)
@@ -44,7 +46,8 @@ class EventPresenter extends BasePresenter
 		$eventId = '3';
 		$this->template->list = $this->list;
 		$this->template->attendees = $this->context->attendeeRepository->getAttendees($eventId);
-		$this->template->users = $this->context->userRepository->findAll();
+		$this->template->approvals = $this->context->eventRepository->getApprovals($eventId);
+
 	}
 
 	public function createComponentEventForm()

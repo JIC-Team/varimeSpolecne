@@ -31,11 +31,12 @@ class AttendeeRepository extends Repository
 	public function getAttendees($eventId)
 	{
 		$names = array();
-		foreach($this->getTable()->where(array("event_id" => $eventId)) as $attendee) 
+		foreach($this->getTable()->where(array('event_id' => $eventId)) as $attendee) 
 		{
-			$names[] = $attendee->ref("user");
+			$names = $attendee->ref('user');
 		}
 		return $names;
+		// die(var_dump($names));
 	}
 
 	/**

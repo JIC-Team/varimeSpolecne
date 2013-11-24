@@ -1,5 +1,5 @@
 {control eventForm}
 <hr />
 <ul n:inner-foreach="$attendees as $attendee">
- <li>{$attendee->first_name} <a n:href="approve! -1, $attendee->id">Can't go</a> | <a n:href="approve! 1, $attendee->id">Can go</a></li>
+	<li n:tag-if="$attendee->approved == 0">{$attendee->first_name}<a n:href="approve! -1, $attendee->id">Can't go</a> | <a n:href="approve! 1, $attendee->id">Can go</a></li>
 </ul>

@@ -27,9 +27,9 @@ class UserRepository extends Repository
 		));
 	}
   
-  public function existUserEmail($email)
+  	public function existUserEmail($email)
 	{
 		$result = $this->getTable()->where("email", $email)->count("*");
-    return $result;
+    	return $result;
 	}
 }
