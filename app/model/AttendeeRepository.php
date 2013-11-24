@@ -33,9 +33,18 @@ class AttendeeRepository extends Repository
 		$names = array();
 		foreach($this->getTable()->where(array("event_id" => $eventId)) as $attendee) 
 		{
-			$names[] = $attendee->ref("user")->first_name;
+			$names[] = $attendee->ref("user");
 		}
-
 		return $names;
-	}	
+	}
+
+	/**
+	 *
+	 * @return 
+	 * @author David Pohan
+	 */
+	public function setApproval($approval, $id)
+	{
+		return $this->getDb()->exec('UPDATE attendee SET approved = ? WHERE id = ?', $approval, $id);
+	}
 }

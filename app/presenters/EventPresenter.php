@@ -26,6 +26,17 @@ class EventPresenter extends BasePresenter
 	}
 
 	/**
+	 *
+	 * @return 
+	 * @author David Pohan
+	 */
+	public function handleApprove($approval, $id)
+	{
+		$this->context->attendeeRepository->setApproval($approval, $id);
+		$this->redirect('default');
+	}
+
+	/**
 	 * @todo hardcoded eventId
 	 */
 	public function renderDefault()
