@@ -27,10 +27,13 @@ class EventPresenter extends BasePresenter
 		// 	$this->setView('Homepage:default');
 	}
 
+	/**
+	 * @todo hardcoded eventId
+	 */
 	public function renderDefault()
 	{
 		$this->template->list = $this->list;
-		$this->template->attendees = $this->attendeeRepository->findAll();
+		$this->template->attendees = $this->attendeeRepository->getAttendees('3');
 	}
 
 	public function createComponentEventForm()

@@ -1,5 +1,5 @@
 {control eventForm}
 <hr />
-{foreach $attendees as $attendee}
-{$attendee}
-{/foreach}
+<ul n:inner-foreach="$attendees as $attendee">
+<li>{$attendee->approved}</li>
+</ul>

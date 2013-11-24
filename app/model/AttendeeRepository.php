@@ -22,5 +22,14 @@ class AttendeeRepository extends Repository
 		));
 	}
 
-	
+	/**
+	 * returns attendees attending event with $eventId
+	 * @param int $eventId
+	 * @return Nette\Database\Table\Selection
+	 * @author David Pohan
+	 */
+	public function getAttendees($eventId)
+	{
+		return $this->findBy(array('event_id' => $eventId));
+	}	
 }
