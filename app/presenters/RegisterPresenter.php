@@ -6,7 +6,7 @@ use Nette\Application\UI,
 
 class RegisterPresenter extends BasePresenter {
 
-    /** @var Todo\UserRepository */
+    /** @var userRepository */
     private $userRepository;
 
     protected function startup() {
@@ -20,17 +20,28 @@ class RegisterPresenter extends BasePresenter {
 
     protected function createComponentRegisterForm() {
         $form = new Form;
-        $form->addText('name', 'Jméno');
-        $form->addText('email', 'E-mail: *', 35)
-                ->setEmptyValue('@')
+        $form->addText('first_name', 'Křestní jméno', 25)
+                ->addRule(Form::FILLED, 'Vyplňte Vaše křestní jméno')
+                ->addCondition(Form::FILLED);
+        $form->addText('last_name', 'Příjmení', 25)
+                ->addRule(Form::FILLED, 'Vyplňte Vaše příjmení')
+                ->addCondition(Form::FILLED);
+        $form->addSelect('gender', 'Pohlaví:', array('male' => 'Muž', 'female' => 'Žena'))
+                ->addRule(Form::FILLED, 'Zadejte Vaše pohlaví')
+                ->addCondition(Form::FILLED);
+        $form->addText('email', 'E-mail:', 35)
                 ->addRule(Form::FILLED, 'Vyplňte Váš email')
+                ->addRule(function($control) {
+                    if(($this->userRepository->existUserEmail($control->getValue()))>0){return false;}
+                    else{return true;}
+                }, "Duplicitní email")
                 ->addCondition(Form::FILLED)
                 ->addRule(Form::EMAIL, 'Neplatná emailová adresa');
-        $form->addPassword('password', 'Heslo: *', 20)
+        $form->addPassword('password', 'Heslo:', 20)
                 ->setOption('description', 'Alespoň 6 znaků')
                 ->addRule(Form::FILLED, 'Vyplňte Vaše heslo')
                 ->addRule(Form::MIN_LENGTH, 'Heslo musí mít alespoň %d znaků.', 6);
-        $form->addPassword('password2', 'Heslo znovu: *', 20)
+        $form->addPassword('password2', 'Zopakovat heslo:', 20)
                 ->addConditionOn($form['password'], Form::VALID)
                 ->addRule(Form::FILLED, 'Heslo znovu')
                 ->addRule(Form::EQUAL, 'Hesla se neshodují.', $form['password']);

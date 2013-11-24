@@ -10,11 +10,11 @@ use Nette\Security,
 class Authenticator extends Nette\Object implements Security\IAuthenticator
 {
 	const
-		TABLE_NAME = 'users',
+		TABLE_NAME = 'user',
 		COLUMN_ID = 'id',
-		COLUMN_NAME = 'username',
+		COLUMN_NAME = 'email',
 		COLUMN_PASSWORD = 'password',
-		COLUMN_ROLE = 'role',
+		COLUMN_ROLE = '',
 		PASSWORD_MAX_LENGTH = 4096;
 
 	/** @var Nette\Database\Connection */
@@ -38,16 +38,16 @@ class Authenticator extends Nette\Object implements Security\IAuthenticator
 		$row = $this->database->table(self::TABLE_NAME)->where(self::COLUMN_NAME, $username)->fetch();
 
 		if (!$row) {
-			throw new Security\AuthenticationException('The username is incorrect.', self::IDENTITY_NOT_FOUND);
+			throw new Security\AuthenticationException('Zadali jste špatné jméno..', self::IDENTITY_NOT_FOUND);
 		}
 
 		if ($row[self::COLUMN_PASSWORD] !== $this->calculateHash($password, $row[self::COLUMN_PASSWORD])) {
-			throw new Security\AuthenticationException('The password is incorrect.', self::INVALID_CREDENTIAL);
+			throw new Security\AuthenticationException('Zadali jste špatné heslo..', self::INVALID_CREDENTIAL);
 		}
 
 		$arr = $row->toArray();
 		unset($arr[self::COLUMN_PASSWORD]);
-		return new Nette\Security\Identity($row[self::COLUMN_ID], $row[self::COLUMN_ROLE], $arr);
+		return new Nette\Security\Identity($row[self::COLUMN_ID], false, $arr);
 	}
 
 
