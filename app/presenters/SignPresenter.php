@@ -17,11 +17,11 @@ class SignPresenter extends BasePresenter
 	protected function createComponentSignInForm()
 	{
 		$form = new UI\Form;
-		$form->addText('username', 'Username:')
-			->setRequired('Please enter your username.');
+		$form->addText('email', 'Email:')
+			->setRequired('Zadejte Váš email.');
 
-		$form->addPassword('password', 'Password:')
-			->setRequired('Please enter your password.');
+		$form->addPassword('password', 'Heslo:')
+			->setRequired('Zadejte Vaše heslo.');
 
 		$form->addCheckbox('remember', 'Keep me signed in');
 
@@ -44,7 +44,7 @@ class SignPresenter extends BasePresenter
 		}
 
 		try {
-			$this->getUser()->login($values->username, $values->password);
+			$this->getUser()->login($values->email, $values->password);
 			$this->redirect('Homepage:');
 
 		} catch (Nette\Security\AuthenticationException $e) {
