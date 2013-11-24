@@ -22,5 +22,30 @@ class AttendeeRepository extends Repository
 		));
 	}
 
-	
+	/**
+	 * returns attendees attending event with $eventId
+	 * @param int $eventId
+	 * @return Nette\Database\Table\Selection
+	 * @author David Pohan
+	 */
+	public function getAttendees($eventId)
+	{
+		$names = array();
+		foreach($this->getTable()->where(array('event_id' => $eventId)) as $attendee) 
+		{
+			$names = $attendee->ref('user');
+		}
+		return $names;
+		// die(var_dump($names));
+	}
+
+	/**
+	 *
+	 * @return 
+	 * @author David Pohan
+	 */
+	public function setApproval($approval, $id)
+	{
+		return $this->getDb()->exec('UPDATE attendee SET approved = ? WHERE id = ?', $approval, $id);
+	}
 }

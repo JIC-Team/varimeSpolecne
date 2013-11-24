@@ -55,4 +55,17 @@ class EventRepository extends Repository
 		if($approvePerson)
 			return $this->getDb()->exec('UPDATE event SET people = people + 1 WHERE id = ?', $userId);
 	}
+
+	/**
+	 * @author David Pohan
+	 */
+	public function getApprovals($eventId)
+	{
+		$approvals = array();
+		foreach($this->getTable()->where(array('id' => $eventId)) as $approval)
+		{
+			$approvals[] = $approval->related('attendee');
+		}
+		return $approvals;
+	}
 }
