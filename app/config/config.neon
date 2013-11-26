@@ -25,7 +25,7 @@ common:
 			password:
 
 		session:
-			expiration: 14 days
+			expiration: +30 days
 
 
 	services:

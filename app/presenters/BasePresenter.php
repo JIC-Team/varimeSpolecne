@@ -5,5 +5,10 @@
  */
 abstract class BasePresenter extends Nette\Application\UI\Presenter
 {
-
+  public function handleSignOut()
+  {
+    $this->getUser()->logout();
+    $this->flashMessage('Uživatel byl odhlášen.');
+    $this->redirect('Homepage:');
+  }
 }
