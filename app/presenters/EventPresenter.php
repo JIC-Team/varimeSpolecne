@@ -16,8 +16,9 @@ class EventPresenter extends BasePresenter
 	public function startup()
 	{
 		parent::startup();
-		// if(!$this->getUser()->isLoggedIn())
-		// 	$this->redirect('Sign:in');
+		if(!$this->getUser()->isLoggedIn()){
+		  $this->redirect('Sign:in');
+    }
 	}
 
 	public function actionDefault($id)
