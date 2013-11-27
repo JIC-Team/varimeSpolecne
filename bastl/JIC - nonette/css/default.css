@@ -1,0 +1,6 @@
+body {padding: 0px;margin: 0px;}
+#content {	width: 60%;min-width: 500px;border: 1px solid grey;margin: auto}
+
+#search {width:90%;margin: auto;min-height: 300px;margin-top: 300px;border: 1px solid black;margin-top: 200px;margin-bottom: 200px;}
+.form {width:100%;border: 1px solid green;text-align: center;}
+.progress {width:100%;border: 1px solid blue;text-align: center;}
