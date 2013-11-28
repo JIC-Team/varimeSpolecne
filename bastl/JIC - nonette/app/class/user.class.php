@@ -12,11 +12,11 @@ class user
 	public function __construct ($id)
     {
     	$this->id=$id;
-    	$this->firstName=selectWhere("firstName","user","id",$this->id);
-    	$this->lastName=selectWhere("lastName","user","id",$this->id);
+    	$this->firstName=selectWhere("first_name","user","id",$this->id);
+    	$this->lastName=selectWhere("last_name","user","id",$this->id);
     	$this->email=selectWhere("email","user","id",$this->id);
     	$this->password=selectWhere("password","user","id",$this->id);
-    	$this->gander=selectWhere("gander","user","id",$this->id);
+    	$this->gander=selectWhere("gender","user","id",$this->id);
     	$this->date=selectWhere("date","user","id",$this->id);
     }
 

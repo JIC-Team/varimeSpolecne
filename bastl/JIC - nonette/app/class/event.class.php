@@ -5,6 +5,7 @@ class Event
 	public $date;
 	public $user_id;
 	public $food;
+    public $place;
 	public $discription;
 	public $title;
 	public $max_people;
@@ -19,14 +20,8 @@ class Event
     	$this->description=selectWhere("description","event","id",$this->id);
     	$this->max_people=selectWhere("max_people","event","id",$this->id);
     	$this->date=selectWhere("date","event","id",$this->id);
+        $this->date=selectWhere("place","event","id",$this->id);
     	$this->food=selectWhere("food","event","id",$this->id);
-    }
-
-
-    //set variables
-    public function initialize()
-    {
-
     }
 
     //return info

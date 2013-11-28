@@ -1,6 +1,7 @@
 <?php
 include "config.php";
 session_start();
+////////////////////////just f
 //just for shorter code
 function selectWhere($x,$from,$where,$y)
 {
@@ -10,8 +11,21 @@ function selectWhere($x,$from,$where,$y)
  	$text = $text_row[$x];
  	return $text;
 }
-
-//check if row exist
+//shorten text (full words), to x characters
+function shorter($text,$characters)
+{
+	
+	if(strlen($text)>$characters)
+	{
+		$pos=strpos($text,' ', $characters);
+		return (substr($text,0,$pos))."...";	
+	}
+	else
+	{
+		return $text;
+	}
+}
+//check if row exist, just for shorter code
 function exist($from,$where,$y)
 {
 	include "config.php";
@@ -27,19 +41,44 @@ function exist($from,$where,$y)
 		return false;
 	}
 }
+
+
+//loads all classes
+foreach (glob("app/class/*class.php") as $filename)
+{
+    include $filename;
+}
+
 /////////////////////////////////events actions////////////////////////////////////////
 //show events
 function showEvents()
 {
     //more features will be included
     include "config.php";
-    $text_mysql = mysqli_query($con,"SELECT * FROM event"); 
-    while($text_row = mysqli_fetch_array($text_mysql))
+    $mysql = mysqli_query($con,"SELECT * FROM event");
+    while($row = mysqli_fetch_array($mysql))
     {
-        echo "<a href='event.php?id={$text_row['id']}'>{$text_row['title']}</a><br>";
+		$des=shorter($row['description'],30); 
+        echo "<tr><td>{$row['title']}'</td><td>{$des}</td><td><a href='event.php?id={$row['id']}'´>Zobrazit info/Zúčastnit se</td></tr>";
     }
 }
 
+//create event
+function create($user_id,$title,$discription,$date,$food,$max_people)
+{
+	$error=0;
+	
+    //code
+
+    if($error==0)
+	{
+		return "Akce vytvořena";
+	}
+	else
+	{
+		return "Akci nelze vytvořit, protože...";
+	}
+}
 /////////////////////////////////user actions////////////////////////////////////////
 //check if user is logged
 function isLogged()
@@ -60,8 +99,9 @@ function signup($firstName,$lastName,$email,$password,$repassword,$gender)
 	$error=0;
 	
 	if(exist("user","email",$email)){$error=1;}
-	else if(!preg_match('/^[a-zA-Z0-9]+$/', $firstName)){$error=2;}
-	else if(!preg_match('/^[a-zA-Z0-9]+$/', $lastName)){$error=2;}
+	else if(preg_match('<|>', $firstName)){$error=2;}
+	else if(preg_match('<|>', $lastName)){$error=2;}
+	else if(preg_match('<|>', $email)){$error=2;}
 	else if($gender!=="m" && $gender!=="f"){$error=6;}
     else if($firstName==""){$error=3;}
     else if($password==""){$error=3;}
@@ -124,8 +164,17 @@ function logout()
 	session_destroy();
 }
 
-//loads all classes
-foreach (glob("app/class/*class.php") as $filename)
+function showLoggedUser($column)
 {
-    include $filename;
+	if(isLogged())
+	{
+	$id=$_SESSION['id'];
+	$user=New user($id);
+	return $user->$column;
+	}	
+	else
+	{return "";}
 }
+
+
+

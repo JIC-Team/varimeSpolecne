@@ -62,7 +62,6 @@ else
 	$repassword="";
 	$gender="";
 }
-
 //sign in
 if(isset($_POST['signin']))
 {
@@ -86,26 +85,34 @@ if(isLogged())
 	header("location:index.php");
 }
 ?>
-<!---sign in-->
-<b>Prihlaseni:</b>
-<form action="sign.php" method="post">
-	Email: <input type="email" name="email"><br>
-	Heslo: <input type="password" name="password"><br>
-	<input type="submit" name="signin" value="Prihlasit se"><br>
-</form>
+<!DOCTYPE>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8">
+    <title>Vaříme společně</title>
+</head>
+<body>
+	<!---sign in-->
+	<b>Prihlaseni:</b>
+	<form action="sign.php" method="post">
+		Email: <input type="email" name="email"><br>
+		Heslo: <input type="password" name="password"><br>
+		<input type="submit" name="signin" value="Prihlasit se"><br>
+	</form>
 
-<hr>
-<b>Registrace:</b>
-<form action="sign.php" method="post">
-	Email: <input type="email" name="email" value="<?php echo $email;?>"><br>
-	Křestní jméno: <input type="text" name="firstName" value="<?php echo $firstName;?>"><br>
-	Příjmení: <input type="text" name="lastName" value="<?php echo $lastName;?>"><br>
-	Pohlaví: 
-		<select name="gender">
-			<option value="m" <?php if($gender=="m"){echo "selected='selected'";}?>>muž</option>
-			<option value="f" <?php if($gender=="f"){echo "selected='selected'";}?>>žena</option>
-		</select>
-	Heslo: <input type="password" name="password"><br>
-	Heslo znovu: <input type="password" name="repassword"><br>
-	<input type="submit" name="signup" value="Registrovat se"><br>
-</form>
+	<hr>
+	<b>Registrace:</b>
+	<form action="sign.php" method="post">
+		Email: <input type="email" name="email" value="<?php echo $email;?>"><br>
+		Křestní jméno: <input type="text" name="firstName" value="<?php echo $firstName;?>"><br>
+		Příjmení: <input type="text" name="lastName" value="<?php echo $lastName;?>"><br>
+		Pohlaví: 
+			<select name="gender">
+				<option value="m" <?php if($gender=="m"){echo "selected='selected'";}?>>muž</option>
+				<option value="f" <?php if($gender=="f"){echo "selected='selected'";}?>>žena</option>
+			</select>
+		Heslo: <input type="password" name="password"><br>
+		Heslo znovu: <input type="password" name="repassword"><br>
+		<input type="submit" name="signup" value="Registrovat se"><br>
+	</form>
+</body>
