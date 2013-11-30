@@ -65,9 +65,12 @@ else
 //sign in
 if(isset($_POST['signin']))
 {
+	//get variables
 	$email = mysqli_real_escape_string($con,$_POST['email']);
 	$password = mysqli_real_escape_string($con,$_POST['password']);
+	//sign in
 	$error=signin($email,$password);
+	//echo errors
 	switch($error)
 	{
 		case 1:
@@ -79,7 +82,7 @@ if(isset($_POST['signin']))
 	}
 }
 
-//if logged go to index.php
+//if is user logged go to index.php
 if(isLogged())
 {
 	header("location:index.php");

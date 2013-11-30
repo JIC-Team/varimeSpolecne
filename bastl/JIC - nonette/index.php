@@ -17,6 +17,8 @@ include "app/phpScripts.php";
 	?>
 	</table>
 	<hr>
+	<a href="myevents.php">Přehled mých akcí</a>
+	<hr>
 	<a href="sign.php">Registrovat/Přihlásit</a>
 	<hr>
 	<a href="create.php">Vytvořit novou událost</a>

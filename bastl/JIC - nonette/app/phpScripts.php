@@ -25,11 +25,29 @@ function shorter($text,$characters)
 		return $text;
 	}
 }
+
 //check if row exist, just for shorter code
 function exist($from,$where,$y)
 {
 	include "config.php";
 	$result = mysqli_query($con,"SELECT * from $from where $where = '$y' LIMIT 1")or die (mysqli_error($con));
+
+	if(mysqli_num_rows($result)>0)
+	{
+
+	    return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+//check if row exist, just for shorter code
+function exist2($from,$where,$y,$where2,$x)
+{
+	include "config.php";
+	$result = mysqli_query($con,"SELECT * from $from where $where = '$y' AND $where2 = '$x' LIMIT 1")or die (mysqli_error($con));
 
 	if(mysqli_num_rows($result)>0)
 	{
@@ -50,34 +68,81 @@ foreach (glob("app/class/*class.php") as $filename)
 }
 
 /////////////////////////////////events actions////////////////////////////////////////
-//show events
+
 function showEvents()
 {
-    //more features will be included
-    include "config.php";
-    $mysql = mysqli_query($con,"SELECT * FROM event");
-    while($row = mysqli_fetch_array($mysql))
-    {
-		$des=shorter($row['description'],30); 
-        echo "<tr><td>{$row['title']}'</td><td>{$des}</td><td><a href='event.php?id={$row['id']}'´>Zobrazit info/Zúčastnit se</td></tr>";
-    }
+	include "app/config.php";
+	$mysql = mysqli_query($con,"SELECT * FROM event ORDER by DATE desc");
+	while($row = mysqli_fetch_array($mysql))
+	{
+    	echo "<tr><td>{$row['title']}</td><td>{$row['date']}</td><td>{$row['place']}</td><td><a href='event.php?id={$row['id']}'´>Zobrazit info/Zúčastnit se</td></tr>";
+	}
+}
+
+function showMyEvents($user_id)
+{
+	include "app/config.php";
+	$mysql = mysqli_query($con,"SELECT * FROM event WHERE user_id=$user_id ORDER by DATE desc");
+	while($row = mysqli_fetch_array($mysql))
+	{
+		
+    	echo "<tr><td>{$row['title']}</td><td>{$row['date']}</td><td><a href='event.php?id={$row['id']}'>Zobrazit info<a/></td></tr>";
+	}
+}
+
+function showAttendedEvents($user_id)
+{
+	include "app/config.php";
+	$mysql_attendee = mysqli_query($con,"SELECT * FROM attendee WHERE user_id=$user_id");
+	while($row_attendee = mysqli_fetch_array($mysql_attendee))
+	{
+		$event_id=$row_attendee['event_id'];
+		$event=new Event($event_id);
+
+    	echo "<tr><td>{$event->title}</td><td>{$event->date}</td><td><a href='event.php?id={$event->id}'>Zobrazit info<a/></td></tr>";
+	}
 }
 
 //create event
-function create($user_id,$title,$discription,$date,$food,$max_people)
+function create($user_id,$title,$description,$food,$max_people,$place,$hour,$day,$month,$year)
 {
-	$error=0;
 	
-    //code
+    include "config.php";
+	$error=0;    	
 
-    if($error==0)
-	{
-		return "Akce vytvořena";
-	}
-	else
-	{
-		return "Akci nelze vytvořit, protože...";
-	}
+	$string =$day.".".$month.".".$year." ".$hour;
+	$time = mktime($hour,0,0,$month,$day,$year);
+	$time=date("Y-m-d H:i:s", $time);
+	
+	if(!preg_match('<|>', $title)){$error=2;}
+	else if(preg_match('/<|>/', $description)){$error=2;}
+	else if(preg_match('/<|>/', $food)){$error=2;}
+	else if(preg_match('/<|>/', $place)){$error=2;}
+	else if(preg_match('/[0-9]/', $max_people)){$error=1;}
+	else if(preg_match('/[0-9]/', $day)){$error=1;}
+	else if(preg_match('/[0-9]/', $year)){$error=1;}
+	else if(preg_match('/[0-9]/', $month)){$error=1;}
+	else if(preg_match('/[0-9]/', $hour)){$error=1;}
+	else if(exist2("event","user_id",$user_id,"date",$time)){$error=5;}
+	else if($month>12){$error=4;}
+	else if($day>31){$error=4;}
+	else if($hour>24){$error=4;}
+    else if($title==""){$error=3;}
+    else if($description==""){$error=3;}
+    else if($day==""){$error=3;}
+    else if($year==""){$error=3;}
+    else if($place==""){$error=3;}
+    else if($hour==""){$error=3;}
+    else if($month==""){$error=3;}
+    else if($food==""){$error=3;}
+    else if($max_people==""){$error=3;}
+    else if($user_id==""){$error=3;}
+
+    else
+    {
+    	mysqli_query($con,"INSERT INTO event (date,place,max_people,food,title,description,user_id) VALUES ('$time','$place','$max_people','$food','$title','$description','$user_id')");
+    }
+	return $error;
 }
 /////////////////////////////////user actions////////////////////////////////////////
 //check if user is logged
@@ -99,9 +164,9 @@ function signup($firstName,$lastName,$email,$password,$repassword,$gender)
 	$error=0;
 	
 	if(exist("user","email",$email)){$error=1;}
-	else if(preg_match('<|>', $firstName)){$error=2;}
-	else if(preg_match('<|>', $lastName)){$error=2;}
-	else if(preg_match('<|>', $email)){$error=2;}
+	else if(preg_match('/<|>/', $firstName)){$error=2;}
+	else if(preg_match('/<|>/', $lastName)){$error=2;}
+	else if(preg_match('/<|>/', $email)){$error=2;}
 	else if($gender!=="m" && $gender!=="f"){$error=6;}
     else if($firstName==""){$error=3;}
     else if($password==""){$error=3;}
@@ -116,8 +181,6 @@ function signup($firstName,$lastName,$email,$password,$repassword,$gender)
     	mysqli_query($con,"INSERT INTO user (password, first_name, last_name, email, gender) VALUES ('$hash','$firstName','$lastName','$email','$gender')");
     //	mysqli_query($con,"INSERT INTO user (password, first_name, last_name, email, gender) VALUES ('$hash','$firstName','$lastName','$email','$gender')");
     }
-
-
 	return $error;
 }
 
