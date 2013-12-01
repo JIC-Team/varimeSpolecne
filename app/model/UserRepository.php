@@ -8,7 +8,7 @@ class UserRepository extends Repository
 {    
   public function findUser(array $by)
   {
-      return $this->getTable()->where($by)->fetch();
+    return $this->getTable()->where($by)->fetch();
   }  
   
   public function registerUserDB($values)
@@ -30,7 +30,7 @@ class UserRepository extends Repository
   
   public function updateUser(ActiveRow $user, array $values)
   {
-      $user->update($values);
+    $user->update($values);
   }
   
   public function createIdentity(ActiveRow $user)
@@ -39,5 +39,12 @@ class UserRepository extends Repository
     unset($user['password']);
 
     return new \Nette\Security\Identity($user->id, NULL, $data);
+  }
+
+  public function setPassword($id, $password)
+  {
+    $this->getTable()->where(array('id' => $id))->update(array(
+        'password' => Authenticator::calculateHash($password)
+    ));
   }
 }

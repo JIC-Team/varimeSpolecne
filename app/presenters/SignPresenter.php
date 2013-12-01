@@ -16,12 +16,11 @@ class SignPresenter extends BasePresenter
 
     protected function startup() {
       parent::startup();
+      $this->userRepository = $this->context->userRepository;
       
       if ($this->getUser()->isLoggedIn()) {
         $this->redirect('Homepage:');
       }
-      
-      $this->userRepository = $this->context->userRepository;
     }
 
     protected function createComponentSignUpForm() {
@@ -37,10 +36,7 @@ class SignPresenter extends BasePresenter
               ->addCondition(Form::FILLED);
       $form->addText('email', 'E-mail:', 35)
               ->addRule(Form::FILLED, 'Vyplňte Váš email')
-              ->addRule(function($control) {
-                  if($this->userRepository->findUser(array('email'=>$control->getValue()))){return false;}
-                  else{return true;}
-              }, "Duplicitní email")
+              ->addRule(callback($this, 'isEmailAvailable'), 'Tento email je již zabrán.')
               ->addCondition(Form::FILLED)
               ->addRule(Form::EMAIL, 'Neplatná emailová adresa');
       $form->addPassword('password', 'Heslo:', 20)
@@ -57,6 +53,10 @@ class SignPresenter extends BasePresenter
       return $form;
     }
     
+    public function isEmailAvailable(Nette\Forms\IControl $control) {
+      return ($this->userRepository->findUser(array('email'=>$control->getValue())))?false:true;    
+    }
+    
     public function signUpFormSubmitted(UI\Form $form) {
       $values = $form->getValues();
       $new_user_id = $this->userRepository->registerUserDB($values);
@@ -71,7 +71,7 @@ class SignPresenter extends BasePresenter
             ->send($mail);
         */
         
-        $this->flashMessage('Registrace se povedla! Zkontrolujte si email.');
+        $this->flashMessage('Registrace se povedla!');
         $this->redirect('Sign:in');
       }
     }
@@ -133,39 +133,12 @@ class SignPresenter extends BasePresenter
   public function actionFbLogin()
   {
     $me = $this->context->facebook->api('/me');
-    $identity = $this->context->facebookAuthenticator->authenticate($me);
+    $me['access_token'] = $this->context->facebook->getAccessToken();
+    $identity = $this->context->facebookRepository->authenticate($me);
 
     $this->getUser()->login($identity);
     $this->redirect('Homepage:');
   }
-
-/*  protected function createComponentSignInForm()
-  {
-          $form = new Form;
-          $form->addText('mail', 'Mail')
-                  ->setRequired('Vyplňte e-mail.');
-
-          $form->addPassword('password', 'Heslo')
-                  ->setRequired('Vyplňte heslo');
-
-          $form->addSubmit('s', 'Přihlásit se');
-
-          $form->onSuccess[] = callback($this, 'signInFormSubmitted');
-          return $form;
-  }  */
-
-/*  public function signInFormSubmitted($form)
-  {
-          try {
-                  $values = $form->getValues();
-                  $user = $this->getUser();
-                  $user->login($values->mail, $values->password);
-                  $this->redirect('Homepage:');
-
-          } catch (\Nette\Security\AuthenticationException $e) {
-                  $form->addError($e->getMessage());
-          }
-  } */
 
   public function handleSignOut()
   {

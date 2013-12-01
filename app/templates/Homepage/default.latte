@@ -4,6 +4,8 @@
 <span class="icon user">{$user->getIdentity()->first_name} {$user->getIdentity()->last_name}</span> |
 <a n:href="signOut!">Odhlásit se</a>
 
+{control passwordForm}
+
 {else}
 
 <h1 n:block=title>Vařím pro tebe</h1>

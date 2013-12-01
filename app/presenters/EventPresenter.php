@@ -21,6 +21,10 @@ class EventPresenter extends BasePresenter
     }
 	}
 
+
+
+
+
 	public function actionDefault($id)
 	{
 		$this->list = $this->context->eventRepository->findBy(array('id' => $id))->fetch();

@@ -16,12 +16,13 @@ class FacebookRepository
    */
   public function authenticate(array $fbUser)
   {
-    $user = $this->userRepository->findUser(array('mail' => $fbUser['email']));
+    $user = $this->userRepository->findUser(array('email' => $fbUser['email']));
 
-    if ($user) {
-        $this->updateMissingData($user, $fbUser);
+    if($user) {
+      $this->updateMissingData($user, $fbUser);
     } else {
-        $user = $this->register($fbUser);
+      $user = $this->register($fbUser);
+      $user = $this->userRepository->findUser(array('email' => $fbUser['email']));
     }
 
     return $this->userRepository->createIdentity($user);
@@ -30,9 +31,14 @@ class FacebookRepository
   public function register(array $me)
   {
     $this->userRepository->registerUser(array(
-      'email' => $me['email'],
       'fbid' => $me['id'],
-      'first_name' => $me['name'],
+      'date' => new \DateTime(),
+      'email' => $me['email'],
+      'password' => '',
+      'first_name' => $me['first_name'],
+      'last_name' => $me['last_name'],
+      'gender' => $me['gender'],
+      'access_token' => $me['access_token'],
     ));
   }
 
@@ -40,12 +46,12 @@ class FacebookRepository
   {
     $updateData = array();
 
-    if (empty($user['first_name'])) {
-      $updateData['first_name'] = $me['name'];
-    }
-
     if (empty($user['fbid'])) {
       $updateData['fbid'] = $me['id'];
+    }
+    
+    if (empty($user['access_token'])) {
+      $updateData['access_token'] = $me['access_token'];
     }
 
     if (!empty($updateData)) {
