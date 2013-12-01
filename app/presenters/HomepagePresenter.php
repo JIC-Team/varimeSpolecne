@@ -9,4 +9,6 @@ class HomepagePresenter extends UserPresenter
 	{
 		$this->template->anyVariable = 'any value';
 	}
+
+	
 }

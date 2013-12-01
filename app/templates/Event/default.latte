@@ -1,5 +1,21 @@
+{block content}
 {control eventForm}
 <hr />
-<ul n:inner-foreach="$attendees as $attendee">
-	<li n:tag-if="$attendee->approved == 0">{$attendee->first_name}<a n:href="approve! -1, $attendee->id">Can't go</a> | <a n:href="approve! 1, $attendee->id">Can go</a></li>
+<a n:href="Homepage:">Úvodní stránka</a>
+<hr />
+
+<h4>Moje akce</h4>
+<ul n:inner-foreach="$myEvents as $myEvent">
+	<li>{$myEvent->title} - Jídlo: {$myEvent->food} <small>(Vytvořeno uživatelem {$myEvent->ref('user_id')->first_name} {$myEvent->ref('user_id')->last_name|truncate:2,'.'})</small></li>
 </ul>
+
+<h4>Cizí akce</h4>
+<ul n:inner-foreach="$otherEvents as $otherEvent">
+	<li>{$otherEvent->food}</li>
+</ul>
+
+<h4>Účastníci</h4>
+<ul n:inner-foreach="$attendees as $attendee">
+	<li>{$attendee->first_name}</li>
+</ul> 
+{/block}

@@ -19,6 +19,8 @@ $configurator->createRobotLoader()
 	->addDirectory(__DIR__ . '/../libs')
 	->register();
 
+$configurator->createRobotLoader()->addDirectory(Vodacek\Forms\Controls\DateInput::register());
+
 // Create Dependency Injection container from config.neon file
 $configurator->addConfig(__DIR__ . '/config/config.neon');
 $configurator->addConfig(__DIR__ . '/config/config.local.neon', $configurator::NONE); // none section

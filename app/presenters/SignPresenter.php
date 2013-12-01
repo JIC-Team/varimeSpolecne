@@ -91,7 +91,7 @@ class SignPresenter extends BasePresenter
 
 		$form->addCheckbox('remember', 'Zůstat přihlášen');
 
-		$form->addSubmit('send', 'Přihládit se');
+		$form->addSubmit('send', 'Přihlásit se');
 
 		$form->onSuccess[] = $this->signInFormSubmitted;
 		return $form;
