@@ -1,0 +1,7 @@
+{block content}
+	{foreach $events as $event}
+		<h2>{$event->title}</h2>
+		<p>{$event->date|date:'%d.%m.%Y'} od {$event->date|date:'%H:%i'} v {$event->place}</p>
+		<p>{$event->description}</p>
+	{/foreach}
+{/block}

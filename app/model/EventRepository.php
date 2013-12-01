@@ -18,13 +18,13 @@ class EventRepository extends Repository
 	 * @return Nette\Database\Table\ActiveRow
 	 * @author David Pohan
 	 */
-	public function createEvent($userId, $place, $food, $maxPeople, $title, $description)
+	public function createEvent($userId, $dateTime, $place, $food, $maxPeople, $title, $description)
 	{
 		/**
 		 * @todo userID
 		 */
 		return $this->getTable()->insert(array(
-			'date' => new \DateTime(),
+			'date' => $dateTime,
 			'place' => $place,
 			'max_people' => $maxPeople,
 			'food' => $food,

@@ -1,5 +1,7 @@
-{control eventForm}
-<hr />
-<ul n:inner-foreach="$attendees as $attendee">
-	<li n:tag-if="$attendee->approved == 0">{$attendee->first_name}<a n:href="approve! -1, $attendee->id">Can't go</a> | <a n:href="approve! 1, $attendee->id">Can go</a></li>
-</ul>
+{block content}
+	<ul>
+	{foreach $events as $event}
+		<li><a href="{link Event:view $event->id}">{$event->title}</a>{if $event->user_id == $userId} | <a n:href="">Editovat</a>{/if}</li>
+	{/foreach}
+	</ul>
+{/block}

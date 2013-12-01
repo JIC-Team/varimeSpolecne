@@ -1,20 +1,7 @@
 {block content}
 {if $user->isLoggedIn()}
-
-<span class="icon user">{$user->getIdentity()->first_name} {$user->getIdentity()->last_name}</span> |
-<a n:href="signOut!">Odhlásit se</a>
-
-{control passwordForm}
-
+	{* {include '../Event/view.latte'} *}
 {else}
-
-<h1 n:block=title>Vařím pro tebe</h1>
-
-<div>
-  <a n:href="Sign:in">Přihlásit se</a>
-  <small>nebo</small>
-  <a n:href="Sign:up">Registrovat</a>
-</div>
-
+	<a n:href="Sign:in">Přihlásit se</a>
 {/if}
 {/block}

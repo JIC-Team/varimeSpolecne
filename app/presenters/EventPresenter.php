@@ -7,29 +7,33 @@ use Nette\Application\UI\Form;
 */
 class EventPresenter extends BasePresenter
 {
-	private $eventRepository;
-	private $attendeeRepository;
-
-	private $list;
-
+	private $events;
 
 	public function startup()
 	{
 		parent::startup();
 		if(!$this->getUser()->isLoggedIn()){
 		  $this->redirect('Sign:in');
-    }
+    	}   
+    	$this->events = $this->context->eventRepository->findAll()->order('date DESC');
 	}
 
-
-
-
+	// public function actionDefault($id)
+	// {
+	// 	$this->list = $this->context->eventRepository->findBy(array('id' => $id))->fetch();
+	// 	// if($this->list === FALSE)
+	// 	// 	$this->setView('Homepage:default');
+	// }
 
 	public function actionDefault($id)
 	{
-		$this->list = $this->context->eventRepository->findBy(array('id' => $id))->fetch();
-		// if($this->list === FALSE)
-		// 	$this->setView('Homepage:default');
+		if($id === null)
+			$this->events = $this->context->eventRepository->findAll();
+	}
+
+	public function actionView($id)
+	{
+		$this->events = $this->context->eventRepository->find(array('id' => $id));
 	}
 
 	/**
@@ -43,28 +47,42 @@ class EventPresenter extends BasePresenter
 		$this->redirect('default');
 	}
 
-	/**
-	 * @todo hardcoded eventId
-	 */
 	public function renderDefault()
 	{
-		$eventId = '3';
-		$this->template->list = $this->list;
-		$this->template->attendees = $this->context->attendeeRepository->getAttendees($eventId);
-		$this->template->approvals = $this->context->eventRepository->getApprovals($eventId);
+		$this->template->events = $this->events;
+		$this->template->userId = $this->user->id;
+	}
 
+	public function renderView()
+	{
+		$this->template->events = $this->events;
 	}
 
 	public function createComponentEventForm()
 	{
 		$form = new Form();
-		$form->addText('place', 'Místo:');
+		$form->addText('place', 'Místo:')
+			->addRule(Form::FILLED, 'Vyplňte místo konání')
+			->addCondition(Form::FILLED);
+		// $form->addDatePicker('date')
+		//     ->addRule(Form::FILLED, 'Musíte vyplnit datum')
+		//     ->addRule(Form::VALID, 'Zadané datum je neplatné');
 		$form->addText('maxPeople', 'Maximální počet lidí:')
-		->addRule(Form::INTEGER);
-		$form->addText('food', 'Jídlo:');
-		$form->addText('title', 'Název:');
-		$form->addText('description', 'Popis:');
+		->addRule(Form::FILLED, 'Vyplňte kolik lidí chcete pozvat')
+			->addRule(Form::INTEGER, 'Musí být číslo')
+			->addCondition(Form::FILLED);
+		$form->addText('food', 'Jídlo:')
+			->addRule(Form::FILLED, 'Vyplňte co chcete vařit')
+			->addCondition(Form::FILLED);
+		$form->addText('title', 'Název:')
+			->addRule(Form::FILLED, 'Vyplňte název události')
+			->addCondition(Form::FILLED);
+		$form->addTextArea('description', 'Popis:')
+			->addRule(Form::FILLED, 'Vyplňte popis události')
+			->addRule(Form::MAX_LENGTH, 'Popis je příliš dlouhý', 1000)
+			->addCondition(Form::FILLED);
 		$form->addSubmit('create', 'Vytvořit');
+
 		$form->onSuccess[] = $this->eventFormSubmitted;
 
 		return $form;
@@ -75,8 +93,8 @@ class EventPresenter extends BasePresenter
 		/**
 		 * @todo userID
 		 */
-		$this->eventRepository->createEvent('1', $form->values->place, $form->values->food, $form->values->maxPeople, $form->values->title, $form->values->description);
+		$this->context->eventRepository->createEvent($this->user->id, new \DateTime(), $form->values->place, $form->values->food, $form->values->maxPeople, $form->values->title, $form->values->description);
 		$this->flashMessage('Událost vytvořena');
-		$this->redirect('this');
+		$this->redirect('Event:default');
 	}
 }
