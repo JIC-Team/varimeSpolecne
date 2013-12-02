@@ -1,7 +1,7 @@
 {block content}
 	<ul>
 	{foreach $events as $event}
-		<li><a href="{link Event:view $event->id}">{$event->title}</a>{if $event->user_id == $userId} | <a n:href="">Editovat</a>{/if}</li>
+		<li><a href="{link Event:view $event->id}">{$event->title}</a>{if $event->user_id == $userId} | <a href="{link Event:edit $event->id}">Editovat</a>{/if}</li>
 	{/foreach}
 	</ul>
 {/block}

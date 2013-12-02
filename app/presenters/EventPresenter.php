@@ -8,6 +8,7 @@ use Nette\Application\UI\Form;
 class EventPresenter extends BasePresenter
 {
 	private $events;
+	private $id = null;
 
 	public function startup()
 	{
@@ -36,6 +37,12 @@ class EventPresenter extends BasePresenter
 		$this->events = $this->context->eventRepository->find(array('id' => $id));
 	}
 
+	public function actionEdit($id)
+	{
+		$this->events = $this->context->eventRepository->find(array('id' => $id));
+		$this->id = $id;
+	}
+
 	/**
 	 *
 	 * @return 
@@ -58,6 +65,11 @@ class EventPresenter extends BasePresenter
 		$this->template->events = $this->events;
 	}
 
+	public function renderEdit()
+	{
+		
+	}
+
 	public function createComponentEventForm()
 	{
 		$form = new Form();
@@ -67,7 +79,7 @@ class EventPresenter extends BasePresenter
 		// $form->addDatePicker('date')
 		//     ->addRule(Form::FILLED, 'Musíte vyplnit datum')
 		//     ->addRule(Form::VALID, 'Zadané datum je neplatné');
-		$form->addText('maxPeople', 'Maximální počet lidí:')
+		$form->addText('max_people', 'Maximální počet lidí:')
 		->addRule(Form::FILLED, 'Vyplňte kolik lidí chcete pozvat')
 			->addRule(Form::INTEGER, 'Musí být číslo')
 			->addCondition(Form::FILLED);
@@ -81,19 +93,39 @@ class EventPresenter extends BasePresenter
 			->addRule(Form::FILLED, 'Vyplňte popis události')
 			->addRule(Form::MAX_LENGTH, 'Popis je příliš dlouhý', 1000)
 			->addCondition(Form::FILLED);
-		$form->addSubmit('create', 'Vytvořit');
 
-		$form->onSuccess[] = $this->eventFormSubmitted;
+		if($this->id === null)
+		{
+			$form->addSubmit('create', 'Vytvořit');
+			$form->onSuccess[] = $this->eventFormSubmitted;
+		}
+		else
+		{
+			$default = array();
+			foreach($this->events[$this->id] as $key => $value)
+				$default[$key] = $value;
+			$form->setDefaults($default);
+			$form->addSubmit('create', 'Aktualizovat');
+			$form->onSuccess[] = $this->eventFormUpdate;
+		}
 
 		return $form;
 	}
+
+	public function eventFormUpdate(Form $form)
+	{
+		$this->context->eventRepository->updateEvent($this->id, $form);
+		$this->flashMessage('Událost aktualizována');
+		$this->redirect('Event:default');
+	}
+
 
 	public function eventFormSubmitted(Form $form)
 	{
 		/**
 		 * @todo userID
 		 */
-		$this->context->eventRepository->createEvent($this->user->id, new \DateTime(), $form->values->place, $form->values->food, $form->values->maxPeople, $form->values->title, $form->values->description);
+		$this->context->eventRepository->createEvent($this->user->id, new \DateTime(), $form->values->place, $form->values->food, $form->values->max_people, $form->values->title, $form->values->description);
 		$this->flashMessage('Událost vytvořena');
 		$this->redirect('Event:default');
 	}

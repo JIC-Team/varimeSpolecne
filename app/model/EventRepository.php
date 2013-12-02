@@ -34,6 +34,11 @@ class EventRepository extends Repository
 		));
 	}
 
+	public function updateEvent($eventId, Nette\Application\UI\Form $form)
+	{
+		return $this->getDb()->exec('UPDATE event SET date = ?, place = ?, max_people = ?, food = ?, title = ?, description = ? WHERE id = ?', new \DateTime(), $form->values->place, $form->values->max_people, $form->values->food, $form->values->title, $form->values->description, $eventId);
+	}
+
 	/**
 	 * Returns filtered rows, ex. array('place' => 'Jungmannova').
 	 * @return Nette\Database\Table\Selection
