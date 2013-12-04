@@ -32,15 +32,31 @@ class EventPresenter extends BasePresenter
 			$this->events = $this->context->eventRepository->findAll();
 	}
 
+	public function renderDefault()
+	{
+		$this->template->events = $this->events;
+		$this->template->userId = $this->user->id;
+	}
+
 	public function actionView($id)
 	{
 		$this->events = $this->context->eventRepository->find(array('id' => $id));
+	}
+
+	public function renderView()
+	{
+		$this->template->events = $this->events;
 	}
 
 	public function actionEdit($id)
 	{
 		$this->events = $this->context->eventRepository->find(array('id' => $id));
 		$this->id = $id;
+	}
+
+	public function renderEdit()
+	{
+		
 	}
 
 	/**
@@ -52,22 +68,6 @@ class EventPresenter extends BasePresenter
 	{
 		$this->context->attendeeRepository->setApproval($approval, $id);
 		$this->redirect('default');
-	}
-
-	public function renderDefault()
-	{
-		$this->template->events = $this->events;
-		$this->template->userId = $this->user->id;
-	}
-
-	public function renderView()
-	{
-		$this->template->events = $this->events;
-	}
-
-	public function renderEdit()
-	{
-		
 	}
 
 	public function createComponentEventForm()

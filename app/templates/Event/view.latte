@@ -3,5 +3,7 @@
 		<h2>{$event->title}</h2>
 		<p>{$event->date|date:'%d.%m.%Y'} od {$event->date|date:'%H:%i'} v {$event->place}</p>
 		<p>{$event->description}</p>
+		<hr />
+		<a n:href="Event:attend! $userId">Účastním se!</a>
 	{/foreach}
 {/block}
