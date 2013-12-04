@@ -1,6 +1,10 @@
 {block content}
 {if $user->isLoggedIn()}
-	{* {include '../Event/view.latte'} *}
+	<ul>
+		{foreach $notifications as $notification}
+			<li>{$notification->first_name}</li>
+		{/foreach}
+	</ul>
 {else}
 	<a n:href="Sign:in">Přihlásit se</a>
 {/if}

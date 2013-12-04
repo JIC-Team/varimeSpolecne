@@ -43,6 +43,7 @@ class EventPresenter extends BasePresenter
 		$this->events = $this->context->eventRepository->find(array('id' => $id));
 	}
 
+	
 	public function renderView($id)
 	{
 		$this->template->events = $this->events;

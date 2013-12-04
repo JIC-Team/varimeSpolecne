@@ -5,9 +5,9 @@
 		<p>{$event->description}</p>
 		<hr />
 		{if $attending}
-			<a n:href="attend! $userId, $event->id">Chci se zúčastnit</a>
-		{else}
 			Účastním se!
+		{else}
+			<a n:href="attend! $userId, $event->id">Chci se zúčastnit</a>
 		{/if}
 	{/foreach}
 {/block}

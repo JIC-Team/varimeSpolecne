@@ -9,7 +9,12 @@ class UserRepository extends Repository
   public function findUser(array $by)
   {
     return $this->getTable()->where($by)->fetch();
-  }  
+  } 
+
+  public function find(array $by)
+   {
+     return $this->findBy($by);
+   } 
   
   public function registerUserDB($values)
   {
