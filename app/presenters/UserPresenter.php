@@ -19,7 +19,6 @@ class UserPresenter extends BasePresenter
     protected function startup()
     {
         parent::startup();
-
         $this->userRepository = $this->context->userRepository;
         $this->authenticator = $this->context->authenticator;
     }

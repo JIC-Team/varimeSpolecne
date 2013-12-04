@@ -14,7 +14,7 @@ class AttendeeRepository extends Repository
 	 * @return Nette\Database\Table\ActiveRow
 	 * @author David Pohan
 	 */
-	public function attend($userId, $eventId)
+	public function addAttendee($userId, $eventId)
 	{
 		return $this->getTable()->insert(array(
 			'user_id' => $userId,

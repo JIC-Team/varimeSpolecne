@@ -43,9 +43,18 @@ class EventPresenter extends BasePresenter
 		$this->events = $this->context->eventRepository->find(array('id' => $id));
 	}
 
-	public function renderView()
+	public function renderView($id)
 	{
 		$this->template->events = $this->events;
+		$this->template->userId = $this->user->id;
+
+		foreach($this->context->attendeeRepository->findAll() as $attendee)
+		{
+			if($attendee->user_id == $this->user->id && $attendee == $id)
+				$this->template->attending = true;
+			else
+				$this->template->attending = false;
+		}
 	}
 
 	public function actionEdit($id)
@@ -57,6 +66,13 @@ class EventPresenter extends BasePresenter
 	public function renderEdit()
 	{
 		
+	}
+
+	public function handleAttend($userId, $eventId)
+	{
+		$this->context->attendeeRepository->addAttendee($userId, $eventId);
+		$this->flashMessage('Chcete se účastnit.');
+		$this->redirect('Event:view', $eventId);
 	}
 
 	/**
