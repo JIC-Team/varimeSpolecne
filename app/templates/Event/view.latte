@@ -11,5 +11,14 @@
 				<a n:href="attend! $userId, $event->id">Chci se zúčastnit</a>
 			{/if}
 		{/if}
+		<ul>
+		{foreach $attendees as $attendee}
+				<li>
+				{if $attendee->event->id == $event->id}
+				{$attendee->user->first_name} {$attendee->user->last_name} | <a n:href="approve! $attendee->id, 'yes', $attendee->user->first_name, $attendee->user->last_name">Ano</a> - <a n:href="approve! $attendee->id, 'no'">Ne</a>
+				</li>
+				{/if}
+		{/foreach}
+		</ul>
 	{/foreach}
 {/block}

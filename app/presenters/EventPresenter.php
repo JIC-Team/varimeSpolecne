@@ -48,7 +48,8 @@ class EventPresenter extends BasePresenter
 	{
 		$this->template->events = $this->events;
 		$this->template->userId = $this->user->id;
-		$this->template->attendees = $this->context->attendeeRepository->getAttendees($id);
+		$this->template->eventId = $id;
+		$this->template->attendees = $this->context->attendeeRepository->find(array('event_id' => $id));
 
 		foreach($this->context->attendeeRepository->findAll() as $attendee)
 		{
@@ -82,10 +83,18 @@ class EventPresenter extends BasePresenter
 	 * @return 
 	 * @author David Pohan
 	 */
-	public function handleApprove($approval, $id)
+	public function handleApprove($attendeeId, $approval, $first, $last)
 	{
-		$this->context->attendeeRepository->setApproval($approval, $id);
-		$this->redirect('default');
+		if($approval == 'yes')
+		{
+			$this->context->attendeeRepository->setApproval($attendeeId, 1);
+			$this->flashMessage('Schválili jste účast pro '.$first.' '.$last);
+		}
+		else if($approval == 'no')
+		{
+			$this->context->attendeeRepository->setApproval($attendeeId, 0);
+			$this->flashMessage('Neschválili jste účast pro '.$first.' '.$last);
+		}
 	}
 
 	public function createComponentEventForm()

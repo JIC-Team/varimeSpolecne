@@ -1,7 +1,16 @@
 {block content}
+	<br />
+	<br />
+	<b>Moje akce</b>
 	<ul>
 	{foreach $events as $event}
-		<li><a href="{link Event:view $event->id}">{$event->title}</a>{if $event->user_id == $userId} | <a href="{link Event:edit $event->id}">Editovat</a>{/if}</li>
+		{if $event->user_id == $userId}<li><a href="{link Event:view $event->id}">{$event->title}<a/> | <a href="{link Event:edit $event->id}">Editovat</a></li>{/if}
+	{/foreach}
+	</ul>
+	<b>Cizí akce</b>
+	<ul>
+	{foreach $events as $event}
+		{if $event->user_id != $userId}<li><a href="{link Event:view $event->id}">{$event->title}</a></li>{/if}
 	{/foreach}
 	</ul>
 {/block}

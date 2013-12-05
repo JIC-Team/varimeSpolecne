@@ -22,6 +22,11 @@ class AttendeeRepository extends Repository
 		));
 	}
 
+	public function find($by)
+	{
+		return $this->findBy($by);
+	}
+
 	/**
 	 * returns attendees attending event with $eventId
 	 * @param int $eventId
@@ -44,8 +49,13 @@ class AttendeeRepository extends Repository
 	 * @return 
 	 * @author David Pohan
 	 */
-	public function setApproval($approval, $id)
+	public function setApproval($id, $approval)
 	{
 		return $this->getDb()->exec('UPDATE attendee SET approved = ? WHERE id = ?', $approval, $id);
+	}
+
+	public function isAttending($userId)
+	{
+		
 	}
 }
