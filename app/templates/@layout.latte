@@ -30,10 +30,11 @@
 			<a n:href="Homepage:default">Domů</a> |
 			<a n:href="Event:create">Vytvořit událost</a> |
 			<a n:href="Event:default">Zobrazit události</a> |
-			<a n:href="Homepage:settings">Nastavení</a> |
+			<a n:href="User:settings">Nastavení</a> |
 			<a n:href="signOut!">Odhlásit se</a>
 		{else}
-			<a n:href="Homepage:default">Domů</a>
+			<a n:href="Homepage:default">Domů</a> |
+			<a n:href="Sign:in">Přihlásit se</a>
 		{/if}
 	{/block}
 	<div n:foreach="$flashes as $flash" class="flash {$flash->type}">{$flash->message}</div>
