@@ -1,6 +1,7 @@
 <?php
 
-use Nette\Application\UI\Form;
+use Nette\Application\UI\Form,
+	Vodacek\Forms\Controls\DateInput;
 
 /**
 * Event presenter
@@ -13,6 +14,7 @@ class EventPresenter extends BasePresenter
 	public function startup()
 	{
 		parent::startup();
+
 		if(!$this->getUser()->isLoggedIn()){
 		  $this->redirect('Sign:in');
     	}   
@@ -77,6 +79,9 @@ class EventPresenter extends BasePresenter
 		$this->flashMessage('Chcete se účastnit.');
 		$this->redirect('Event:view', $eventId);
 	}
+
+
+
 
 	/**
 	 *

@@ -1,10 +1,8 @@
 <?php
 
-// use Nette;
-
 /**
-* Handles atendees
-*/
+ * Handles attendees
+ */
 class AttendeeRepository extends Repository
 {
 	/**
@@ -35,13 +33,13 @@ class AttendeeRepository extends Repository
 	 */
 	public function getAttendees($eventId)
 	{
-		$names = array();
+		$attendees = array();
 		foreach($this->getTable()->where(array('event_id' => $eventId)) as $attendee) 
 		{
-			$names = $attendee->ref('user');
+			$attendees[] = $attendee->ref('user');
 		}
-		return $names;
-		// die(var_dump($names));
+		//die(dump($attendees));
+		return $attendees;
 	}
 
 	/**
