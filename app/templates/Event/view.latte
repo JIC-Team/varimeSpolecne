@@ -1,6 +1,6 @@
 {block content}
 	{foreach $events as $event}
-		<h2>{$event->title}</h2>
+		<h2 class="event">{$event->title}</h2> | {$event->user->first_name}
 		<p>{$event->date|date:'%d.%m.%Y'} od {$event->date|date:'%H:%i'} v {$event->place}</p>
 		<p>{$event->description}</p>
 		<hr />
@@ -11,14 +11,37 @@
 				<a n:href="attend! $userId, $event->id">Chci se zúčastnit</a>
 			{/if}
 		{/if}
+		{if $event->user->id == $user->id}
+		<b>Žádají</b><br/>
 		<ul>
-		{foreach $attendees as $attendee}
-				<li>
-				{if $attendee->event->id == $event->id}
-				{$attendee->user->first_name} {$attendee->user->last_name} | <a n:href="approve! $attendee->id, 'yes', $attendee->user->first_name, $attendee->user->last_name">Ano</a> - <a n:href="approve! $attendee->id, 'no'">Ne</a>
-				</li>
-				{/if}
-		{/foreach}
+			{foreach $attendees as $attendee}
+					{if $attendee->event->id == $event->id && $attendee->approved == 0}
+					<li>
+					{$attendee->user->first_name} {$attendee->user->last_name} | <a n:href="approve! $attendee->id, 'yes', $attendee->user->first_name, $attendee->user->last_name">Ano</a> - <a n:href="approve! $attendee->id, 'no', $attendee->user->first_name, $attendee->user->last_name">Ne</a>
+					</li>
+					{/if}
+			{/foreach}
 		</ul>
+		<b>Schváleni</b><br/>
+		<ul>
+			{foreach $attendees as $attendee}
+					{if $attendee->event->id == $event->id && $attendee->approved == 1}
+					<li>
+					{$attendee->user->first_name} {$attendee->user->last_name} | <a n:href="approve! $attendee->id, 'no', $attendee->user->first_name, $attendee->user->last_name">Ne</a>
+					</li>
+					{/if}
+			{/foreach}
+		</ul>
+		<b>Zamítnuti</b><br/>
+		<ul>
+			{foreach $attendees as $attendee}
+					{if $attendee->event->id == $event->id && $attendee->approved == 2}
+					<li>
+					{$attendee->user->first_name} {$attendee->user->last_name} | <a n:href="approve! $attendee->id, 'yes', $attendee->user->first_name, $attendee->user->last_name">Ano</a>
+					</li>
+					{/if}
+			{/foreach}
+		</ul>
+		{/if}
 	{/foreach}
 {/block}

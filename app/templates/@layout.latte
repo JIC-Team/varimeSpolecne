@@ -30,6 +30,7 @@
 	<script> document.documentElement.className+=' js' </script>
 
 	{block nav}
+	<div class="menu">
 		{if $user->isLoggedIn()}
 			<span class="icon user">{$user->getIdentity()->first_name} {$user->getIdentity()->last_name}</span> |
 			<a n:href="Homepage:default">Domů</a> |
@@ -40,8 +41,9 @@
 		{else}
 			<a n:href="Homepage:default">Domů</a> |
 		{/if}
+	</div>
 	{/block}
-	<div n:foreach="$flashes as $flash" class="flash {$flash->type}">{$flash->message}</div>
+	<div n:foreach="$flashes as $flash" class="flash {$flash->type}">{$flash->message}</div><br />
 	{include #content}
 
 	{block scripts}

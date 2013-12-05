@@ -42,24 +42,28 @@ class EventPresenter extends BasePresenter
 
 	public function actionView($id)
 	{
-		$this->events = $this->context->eventRepository->find(array('id' => $id));
+		
 	}
 
 	
 	public function renderView($id)
 	{
-		$this->template->events = $this->events;
+		$this->template->events = $this->context->eventRepository->find(array('id' => $id));
 		$this->template->userId = $this->user->id;
 		$this->template->eventId = $id;
 		$this->template->attendees = $this->context->attendeeRepository->find(array('event_id' => $id));
 
+		$this->template->attending = $this->isAttending($id);
+	}
+
+	private function isAttending($id)
+	{
 		foreach($this->context->attendeeRepository->findAll() as $attendee)
 		{
-			if($attendee->user_id == $this->user->id && $attendee == $id)
-				$this->template->attending = true;
-			else
-				$this->template->attending = false;
+			if($attendee->user_id == $this->user->id && $attendee->event_id == $id)
+				return true;
 		}
+		return false;
 	}
 
 	public function actionEdit($id)
@@ -97,8 +101,8 @@ class EventPresenter extends BasePresenter
 		}
 		else if($approval == 'no')
 		{
-			$this->context->attendeeRepository->setApproval($attendeeId, 0);
-			$this->flashMessage('Neschválili jste účast pro '.$first.' '.$last);
+			$this->context->attendeeRepository->setApproval($attendeeId, 2);
+			$this->flashMessage('Zamítli jste účast pro '.$first.' '.$last);
 		}
 	}
 
@@ -108,9 +112,9 @@ class EventPresenter extends BasePresenter
 		$form->addText('place', 'Místo:')
 			->addRule(Form::FILLED, 'Vyplňte místo konání')
 			->addCondition(Form::FILLED);
-		// $form->addDatePicker('date')
-		//     ->addRule(Form::FILLED, 'Musíte vyplnit datum')
-		//     ->addRule(Form::VALID, 'Zadané datum je neplatné');
+		$form->addDate('date', 'Datum:')
+		    ->addRule(Form::FILLED, 'Musíte vyplnit datum')
+		    ->addRule(Form::VALID, 'Zadané datum je neplatné');
 		$form->addText('max_people', 'Maximální počet lidí:')
 		->addRule(Form::FILLED, 'Vyplňte kolik lidí chcete pozvat')
 			->addRule(Form::INTEGER, 'Musí být číslo')
@@ -157,7 +161,8 @@ class EventPresenter extends BasePresenter
 		/**
 		 * @todo userID
 		 */
-		$this->context->eventRepository->createEvent($this->user->id, new \DateTime(), $form->values->place, $form->values->food, $form->values->max_people, $form->values->title, $form->values->description);
+		// $this->context->eventRepository->createEvent($this->user->id, new \DateTime(), $form->values->place, $form->values->food, $form->values->max_people, $form->values->title, $form->values->description);
+		$this->context->eventRepository->createEvent($this->user->id, $form);
 		$this->flashMessage('Událost vytvořena');
 		$this->redirect('Event:default');
 	}

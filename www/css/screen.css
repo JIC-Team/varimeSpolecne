@@ -9,6 +9,14 @@ h1 {
 	color: #3484D2;
 }
 
+h2.event {
+	display: inline;
+}
+
+#menu {
+	border-bottom: 1px solid black;
+}
+
 #ajax-spinner {
 	margin: 15px 0 0 15px;
 	padding: 13px;

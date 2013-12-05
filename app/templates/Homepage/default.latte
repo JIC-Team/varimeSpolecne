@@ -1,11 +1,20 @@
 {block content}
 {if $user->isLoggedIn()}
+	<h4>Novinky</h4>
 	<ul>
 		{foreach $attendees as $attendee}
-			{if $attendee->user_id != $user->id && $attendee->event->user_id == $user->id}
-			<li>{$attendee->user->first_name} se chce účastnit <a n:href="Event:view $attendee->event->id">{$attendee->event->title}</a></li>
+			{if $attendee->user_id != $user->id && $attendee->event->user_id == $user->id && $attendee->approved == 0}
+			<li>{$attendee->user->first_name} se chce účastnit akce <a n:href="Event:view $attendee->event->id">{$attendee->event->title}</a></li>
 			{/if}
 		{/foreach}
+	</ul>
+	<h4>Účastním se</h4>
+	<ul>
+	{foreach $attendees as $attendee}
+		{if $attendee->user_id == $user->id}
+			<li><a n:href="Event:view $attendee->event->id">{$attendee->event->title}</a> | {if $attendee->approved == 0}Čeká se na schálení{elseif $attendee->approved == 1}Můžete jít{elseif $attendee->approved == 2}Nemůžete jít{/if}</li>
+		{/if}
+	{/foreach}
 	</ul>
 {else}
 	<a n:href="Sign:in">Přihlásit se</a>

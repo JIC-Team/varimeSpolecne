@@ -5,32 +5,32 @@
 */
 class EventRepository extends Repository
 {
-	/**
-	 * Creates new event
-	 * @param int $userId
-	 * @param string $place
-	 * @param string $food
-	 * @param int $maxPeople
-	 * @param string $title
-	 * @param string $description
-	 * @return Nette\Database\Table\ActiveRow
-	 * @author David Pohan
-	 */
-	public function createEvent($userId, $dateTime, $place, $food, $maxPeople, $title, $description)
-	{
-		/**
-		 * @todo userID
-		 */
-		return $this->getTable()->insert(array(
-			'date' => $dateTime,
-			'place' => $place,
-			'max_people' => $maxPeople,
-			'food' => $food,
-			'title' => $title,
-			'description' => $description,
-			'user_id' => $userId,
-		));
-	}
+	// /**
+	//  * Creates new event
+	//  * @param int $userId
+	//  * @param string $place
+	//  * @param string $food
+	//  * @param int $maxPeople
+	//  * @param string $title
+	//  * @param string $description
+	//  * @return Nette\Database\Table\ActiveRow
+	//  * @author David Pohan
+	//  */
+	// public function createEvent($userId, $dateTime, $place, $food, $maxPeople, $title, $description)
+	// {
+	// 	/**
+	// 	 * @todo userID
+	// 	 */
+	// 	return $this->getTable()->insert(array(
+	// 		'date' => $dateTime,
+	// 		'place' => $place,
+	// 		'max_people' => $maxPeople,
+	// 		'food' => $food,
+	// 		'title' => $title,
+	// 		'description' => $description,
+	// 		'user_id' => $userId,
+	// 	));
+	// }
 
 	public function updateEvent($eventId, Nette\Application\UI\Form $form)
 	{
@@ -49,20 +49,20 @@ class EventRepository extends Repository
 
 		return $event;
 	}
-/*
-	public function createEvent($userId, $values)
+
+	public function createEvent($userId, $form)
 	{
 		return $this->getTable()->insert(array(
-			'date' => $values->datetime,
-			'place' => $values->place,
-			'max_people' => $values->maxPeople,
-			'food' => $values->food,
-			'title' => $values->title,
-			'description' => $values->description,
+			'date' => $form->values->date,
+			'place' => $form->values->place,
+			'max_people' => $form->values->max_people,
+			'food' => $form->values->food,
+			'title' => $form->values->title,
+			'description' => $form->values->description,
 			'user_id' => $userId,
 		));
 	}
-*/
+
 	public function approvePerson($userId, $approvePerson)
 	{
 		// return $this->getTable()->where(array('user_id' => $userId))->update('people' => 'people'+$add);
