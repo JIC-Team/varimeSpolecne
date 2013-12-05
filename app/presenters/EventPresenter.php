@@ -48,6 +48,7 @@ class EventPresenter extends BasePresenter
 	{
 		$this->template->events = $this->events;
 		$this->template->userId = $this->user->id;
+		$this->template->attendees = $this->context->attendeeRepository->getAttendees($id);
 
 		foreach($this->context->attendeeRepository->findAll() as $attendee)
 		{

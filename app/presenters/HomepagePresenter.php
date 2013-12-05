@@ -20,14 +20,11 @@ class HomepagePresenter extends BasePresenter
 
 	public function renderDefault()
 	{
-
+		$this->template->attendees = $this->context->attendeeRepository->findAll();
 	}
 
 	public function actionDefault()
 	{
-		$this->attendees = $this->context->attendeeRepository->findAll();
-		// $this->events = $this->context->eventRepository->find(array('user_id' => $this->getUser()->id));
-
-		$this->template->attendees = $this->attendees;
+		
 	}
 }

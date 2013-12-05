@@ -2,7 +2,9 @@
 {if $user->isLoggedIn()}
 	<ul>
 		{foreach $attendees as $attendee}
+			{if $attendee->user_id != $user->id && $attendee->event->user_id == $user->id}
 			<li>{$attendee->user->first_name} se chce účastnit <a n:href="Event:view $attendee->event->id">{$attendee->event->title}</a></li>
+			{/if}
 		{/foreach}
 	</ul>
 {else}
