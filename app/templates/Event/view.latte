@@ -4,10 +4,12 @@
 		<p>{$event->date|date:'%d.%m.%Y'} od {$event->date|date:'%H:%i'} v {$event->place}</p>
 		<p>{$event->description}</p>
 		<hr />
-		{if $attending}
-			Účastním se!
-		{else}
-			<a n:href="attend! $userId, $event->id">Chci se zúčastnit</a>
+		{if $event->user->id != $user->id}
+			{if $attending}
+				Účastním se!
+			{else}
+				<a n:href="attend! $userId, $event->id">Chci se zúčastnit</a>
+			{/if}
 		{/if}
 	{/foreach}
 {/block}

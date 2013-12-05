@@ -1,8 +1,8 @@
 {block content}
 {if $user->isLoggedIn()}
 	<ul>
-		{foreach $notifications as $notification}
-			<li>{$notification->first_name}</li>
+		{foreach $attendees as $attendee}
+			<li>{$attendee->user->first_name} se chce účastnit <a n:href="Event:view $attendee->event->id">{$attendee->event->title}</a></li>
 		{/foreach}
 	</ul>
 {else}

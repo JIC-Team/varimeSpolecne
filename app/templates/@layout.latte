@@ -34,7 +34,6 @@
 			<a n:href="signOut!">Odhlásit se</a>
 		{else}
 			<a n:href="Homepage:default">Domů</a> |
-			<a n:href="Sign:in">Přihlásit se</a>
 		{/if}
 	{/block}
 	<div n:foreach="$flashes as $flash" class="flash {$flash->type}">{$flash->message}</div>
