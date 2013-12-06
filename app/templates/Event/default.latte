@@ -8,7 +8,18 @@
 	<b>Cizí akce</b>
 	<ul>
 	{foreach $events as $event}
-		{if $event->user_id != $userId}<li><a href="{link Event:view $event->id}">{$event->title}</a></li>{/if}
+		{if $event->user_id != $userId}
+		<li>
+			<a href="{link Event:view $event->id}">{$event->title}</a>
+			{foreach $attendees as $attendee}
+				{if $attendee->event_id == $event->id && $attendeeCount($event->id)} | 
+				{if $attendee->approved == 0}Čeká na schválení
+				{elseif $attendee->approved == 1}Můžete se účastnit
+				{elseif $attendee->approved == 2}Nemůžete se účastnit{/if}
+				{/if}
+			{/foreach}
+		</li>
+		{/if}
 	{/foreach}
 	</ul>
 <?php /* {control eventForm}

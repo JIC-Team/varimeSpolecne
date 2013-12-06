@@ -37,6 +37,7 @@ class EventPresenter extends BasePresenter
 	public function renderDefault()
 	{
 		$this->template->events = $this->events;
+		$this->template->attendees = $this->context->attendeeRepository->findAll();
 		$this->template->userId = $this->user->id;
 	}
 
@@ -52,8 +53,19 @@ class EventPresenter extends BasePresenter
 		$this->template->userId = $this->user->id;
 		$this->template->eventId = $id;
 		$this->template->attendees = $this->context->attendeeRepository->find(array('event_id' => $id));
-
 		$this->template->attending = $this->isAttending($id);
+		$this->template->attendeeCount = $this->attendeeCount($id);
+	}
+
+	private function attendeeCount($id)
+	{
+		$attendeeCount = 0;
+		foreach($this->context->attendeeRepository->findAll() as $attendee)
+		{
+			if($attendee->event_id == $id && $attendee->approved == 1)
+				$attendeeCount++;
+		}
+		return $attendeeCount;
 	}
 
 	private function isAttending($id)
