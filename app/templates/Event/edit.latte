@@ -1,3 +1,3 @@
 {block content}
-	{control eventForm}
+	{control eventForm}{foreach $events as $event}<a n:href="delete! $event->id">Zrušit</a>{/foreach}
 {/block}

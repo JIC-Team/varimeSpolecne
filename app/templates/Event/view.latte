@@ -1,14 +1,16 @@
 {block content}
 	{foreach $events as $event}
-		<h2 class="event">{$event->title}</h2> | {$event->user->first_name}
+		<h2 class="event">{$event->title}</h2> | {$event->user->first_name}{if $event->user_id == $user->id} | <a href="{link Event:edit $event->id}">Editovat</a> | <a n:href="delete! $event->id">Zrušit</a>{/if}
 		<p>{$event->date|date:'%d.%m.%Y'} od {$event->date|date:'%H:%i'} v {$event->place} | {$attendeeCount}/{$event->max_people} schváleno</p>
 		<p>{$event->description}</p>
 		<hr />
-		{if $event->user->id != $user->id && $attendeeCount < $event->max_people}
+		{if $event->user->id != $user->id}
 			{if $attending}
 				Účastním se!
-			{else}
+			{elseif  $attendeeCount < $event->max_people}
 				<a n:href="attend! $userId, $event->id">Chci se zúčastnit</a>
+			{elseif  $attendeeCount >= $event->max_people}
+				Kapacita plná.
 			{/if}
 		{/if}
 		{if $event->user->id == $user->id}

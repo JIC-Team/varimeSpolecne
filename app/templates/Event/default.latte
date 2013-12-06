@@ -12,7 +12,7 @@
 		<li>
 			<a href="{link Event:view $event->id}">{$event->title}</a>
 			{foreach $attendees as $attendee}
-				{if $attendee->event_id == $event->id && $attendeeCount($event->id)} | 
+				{if $attendee->event_id == $event->id}{if $presenter->attendeeCount($attendee->event->id >= $attendee->event->max_people)} | <b>Plno</b>{/if} |
 				{if $attendee->approved == 0}Čeká na schválení
 				{elseif $attendee->approved == 1}Můžete se účastnit
 				{elseif $attendee->approved == 2}Nemůžete se účastnit{/if}

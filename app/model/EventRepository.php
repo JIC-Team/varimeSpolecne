@@ -79,4 +79,9 @@ class EventRepository extends Repository
 		}
 		return $approvals;
 	}
+
+	public function delete($id)
+	{
+		return $this->find(array('id' => $id))->delete();
+	}
 }

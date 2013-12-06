@@ -28,5 +28,14 @@ class HomepagePresenter extends BasePresenter
 		
 	}
 
-	
+	public function attendeeCount($id)
+	{
+		$attendeeCount = 0;
+		foreach($this->context->attendeeRepository->findAll() as $attendee)
+		{
+			if($attendee->event_id == $id && $attendee->approved == 1)
+				$attendeeCount++;
+		}
+		return $attendeeCount;
+	}
 }

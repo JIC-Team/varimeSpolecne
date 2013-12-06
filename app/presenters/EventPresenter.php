@@ -57,7 +57,12 @@ class EventPresenter extends BasePresenter
 		$this->template->attendeeCount = $this->attendeeCount($id);
 	}
 
-	private function attendeeCount($id)
+	public function renderEdit($id)
+	{
+		$this->template->event = $this->context->eventRepository->find(array('id' => $id));
+	}
+
+	public function attendeeCount($id)
 	{
 		$attendeeCount = 0;
 		foreach($this->context->attendeeRepository->findAll() as $attendee)
@@ -84,11 +89,6 @@ class EventPresenter extends BasePresenter
 		$this->id = $id;
 	}
 
-	public function renderEdit()
-	{
-		
-	}
-
 	public function handleAttend($userId, $eventId)
 	{
 		$this->context->attendeeRepository->addAttendee($userId, $eventId);
@@ -96,7 +96,13 @@ class EventPresenter extends BasePresenter
 		$this->redirect('Event:view', $eventId);
 	}
 
-
+	public function handleDelete($id)
+	{
+		$this->context->attendeeRepository->delete($id);
+		$this->context->eventRepository->delete($id);
+		$this->flashMessage('Smazali jste událost');
+		$this->redirect('Event:default');
+	}
 
 
 	/**

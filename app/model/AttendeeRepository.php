@@ -25,6 +25,11 @@ class AttendeeRepository extends Repository
 		return $this->findBy($by);
 	}
 
+	public function delete($id)
+	{
+		return $this->find(array('event_id' => $id))->delete();
+	}
+
 	/**
 	 * returns attendees attending event with $eventId
 	 * @param int $eventId
