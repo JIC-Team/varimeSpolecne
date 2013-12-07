@@ -2,7 +2,7 @@
 	<b>Moje akce</b>
 	<ul>
 	{foreach $events as $event}
-		{if $event->user_id == $userId}<li><a href="{link Event:view $event->id}">{$event->title}<a/> | <a href="{link Event:edit $event->id}">Editovat</a></li>{/if}
+		{if $event->user_id == $userId}<li><a href="{link Event:view $event->id}">{$event->title}<a/> | </li>{/if}
 	{/foreach}
 	</ul>
 	<b>Cizí akce</b>

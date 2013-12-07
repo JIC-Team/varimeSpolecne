@@ -1,7 +1,7 @@
 {block content}
 	{foreach $events as $event}
 		<h2 class="event">{$event->title}</h2> | {$event->user->first_name}{if $event->user_id == $user->id} | <a href="{link Event:edit $event->id}">Editovat</a> | <a n:href="delete! $event->id">Zrušit</a>{/if}
-		<p>{$event->date|date:'%d.%m.%Y'} od {$event->date|date:'%H:%i'} v {$event->place} | {$attendeeCount}/{$event->max_people} schváleno</p>
+		<p>{$event->date|date:'%d.%m.%Y'} od {$event->date|date:'%H:%M'} v {$event->place} | {$attendeeCount}/{$event->max_people} schváleno</p>
 		<p>{$event->description}</p>
 		<hr />
 		{if $event->user->id != $user->id}
