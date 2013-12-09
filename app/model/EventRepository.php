@@ -52,12 +52,12 @@ class EventRepository extends Repository
 	public function expireEvents()
 	{
 		foreach($this->findAll() as $event)
-			if($event->date <= new \DateTime())
-				$this->expire($event->id);
+			if($event->date <= new \DateTime() && !$event->expired)
+				$this->expire($event->id, $event);
 	}
 
-	public function expire($eventId)
+	public function expire($eventId, $event)
 	{
-		return $this->find(array('id' => $eventId))->update(array('expired' => '1'));
+		return $event->update(array('expired' => '1'));
 	}
 }

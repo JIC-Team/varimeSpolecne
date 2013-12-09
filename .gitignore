@@ -1,10 +1,4 @@
-temp/
-cache/
-_Nette.RobotLoader/
+temp/*
 *.sublime*
-*.dat
-*.log
-*.fuse*
-temp/*/*/*
-temp/*/*/*
-temp/cache/*/*
+log/*
+*.fuse_*

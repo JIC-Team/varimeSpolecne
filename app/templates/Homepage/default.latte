@@ -1,20 +1,40 @@
 {block content}
 {if $user->isLoggedIn()}
-	<h4>Schvaloání</h4>
-	<ul>
-		{foreach $attendees as $attendee}
-			{if $attendee->user_id != $user->id && $attendee->event->user_id == $user->id && $attendee->approved == 0}
+	{foreach $attendees as $attendee}
+		{if $iterator->first}
+		<h4>Schvalování</h4>
+		<ul>
+		{/if}
+			{if $attendee->user_id != $user->id && $attendee->event->user_id == $user->id && $attendee->approved == 0 && !$attendee->event->expired}
 			<li>{$attendee->user->first_name} se chce účastnit akce <a n:href="Event:view $attendee->event->id">{$attendee->event->title}</a></li>
 			{/if}
-		{/foreach}
-	</ul>
-	<h4>Účastním se</h4>
-	<ul>
-	{foreach $attendees as $attendee}
-		{if $attendee->user_id == $user->id}
-			<li><a n:href="Event:view $attendee->event->id">{$attendee->event->title}</a> | {if $attendee->approved == 0}Čeká se na schálení{elseif $attendee->approved == 1}Můžete jít{elseif $attendee->approved == 2}Nemůžete jít{/if}</li>
+		{if $iterator->last}
+		</ul>
 		{/if}
 	{/foreach}
+	{foreach $attendees as $attendee}
+	{if $iterator->first}
+	<h4>Účastním se</h4>
+	<ul>
+	{/if}
+		{if $attendee->user_id == $user->id && !$attendee->event->expired}
+			<li><a n:href="Event:view $attendee->event->id">{$attendee->event->title}</a> | {if $attendee->approved == 0}Čeká se na schálení{elseif $attendee->approved == 1}Můžete jít{elseif $attendee->approved == 2}Nemůžete jít{/if}</li>
+		{/if}
+	{if $iterator->last}
 	</ul>
+	{/if}
+	{/foreach}
+	{foreach $events as $event}
+		{if $iterator->first}
+		<h4>Proběhlé události</h4>
+		<ul>
+		{/if}
+			{if $event->expired}
+			<li><a n:href="Event:view $event->id">{$event->title}</a></li>
+			{/if}
+		{if $iterator->last}
+		</ul>
+		{/if}
+	{/foreach}
 {/if}
 {/block}

@@ -14,6 +14,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
 
   public function beforeRender()
   {
-  	$this->context->eventRepository->expireEvents();
+  	if($this->user->isLoggedIn())
+  		$this->context->eventRepository->expireEvents();
   }
 }

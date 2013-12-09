@@ -8,7 +8,6 @@ use Nette\Application\UI\Form,
 */
 class EventPresenter extends BasePresenter
 {
-	private $events;
 	private $id = null;
 
 	public function startup()
@@ -18,12 +17,11 @@ class EventPresenter extends BasePresenter
 		if(!$this->getUser()->isLoggedIn()){
 		  $this->redirect('Sign:in');
     	}   
-    	$this->events = $this->context->eventRepository->findAll()->order('date DESC');
 	}
 
 	public function renderDefault()
 	{
-		$this->template->events = $this->events;
+		$this->template->events = $this->context->eventRepository->findAll()->order('date DESC');
 		$this->template->attendees = $this->context->attendeeRepository->findAll();
 		$this->template->userId = $this->user->id;
 	}
@@ -106,7 +104,6 @@ class EventPresenter extends BasePresenter
 			$this->flashMessage('Zamítli jste účast pro '.$first.' '.$last);
 		}
 	}
-	
 
     /**
      * createComponentEventForm
@@ -125,7 +122,7 @@ class EventPresenter extends BasePresenter
 		    ->addRule(Form::FILLED, 'Musíte vyplnit datum')
 		    ->addRule(Form::VALID, 'Zadané datum je neplatné');
 		$form->addText('max_people', 'Maximální počet lidí:')
-		->addRule(Form::FILLED, 'Vyplňte kolik lidí chcete pozvat')
+			->addRule(Form::FILLED, 'Vyplňte kolik lidí chcete pozvat')
 			->addRule(Form::INTEGER, 'Musí být číslo')
 			->addCondition(Form::FILLED);
 		$form->addText('food', 'Jídlo:')
