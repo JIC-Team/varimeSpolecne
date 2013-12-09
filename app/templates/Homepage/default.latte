@@ -1,6 +1,6 @@
 {block content}
 {if $user->isLoggedIn()}
-	<h4>Novinky</h4>
+	<h4>Schvaloání</h4>
 	<ul>
 		{foreach $attendees as $attendee}
 			{if $attendee->user_id != $user->id && $attendee->event->user_id == $user->id && $attendee->approved == 0}

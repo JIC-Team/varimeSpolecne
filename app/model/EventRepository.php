@@ -5,36 +5,16 @@
 */
 class EventRepository extends Repository
 {
-	// /**
-	//  * Creates new event
-	//  * @param int $userId
-	//  * @param string $place
-	//  * @param string $food
-	//  * @param int $maxPeople
-	//  * @param string $title
-	//  * @param string $description
-	//  * @return Nette\Database\Table\ActiveRow
-	//  * @author David Pohan
-	//  */
-	// public function createEvent($userId, $dateTime, $place, $food, $maxPeople, $title, $description)
-	// {
-	// 	/**
-	// 	 * @todo userID
-	// 	 */
-	// 	return $this->getTable()->insert(array(
-	// 		'date' => $dateTime,
-	// 		'place' => $place,
-	// 		'max_people' => $maxPeople,
-	// 		'food' => $food,
-	// 		'title' => $title,
-	// 		'description' => $description,
-	// 		'user_id' => $userId,
-	// 	));
-	// }
-
 	public function updateEvent($eventId, Nette\Application\UI\Form $form)
 	{
-		return $this->getDb()->exec('UPDATE event SET date = ?, place = ?, max_people = ?, food = ?, title = ?, description = ? WHERE id = ?', new \DateTime(), $form->values->place, $form->values->max_people, $form->values->food, $form->values->title, $form->values->description, $eventId);
+		return $this->find(array('id' => $eventId))->update(array(
+			'date' => $form->values->date,
+			'place' => $form->values->place,
+			'max_people' => $form->values->max_people,
+			'food' => $form->values->food,
+			'title' => $form->values->title,
+			'description' => $form->values->description,
+		));
 	}
 
 	/**
@@ -59,29 +39,25 @@ class EventRepository extends Repository
 			'food' => $form->values->food,
 			'title' => $form->values->title,
 			'description' => $form->values->description,
+			'expired' => 0,
 			'user_id' => $userId,
 		));
-	}
-
-	public function approvePerson($userId, $approvePerson)
-	{
-		// return $this->getTable()->where(array('user_id' => $userId))->update('people' => 'people'+$add);
-		if($approvePerson)
-			return $this->getDb()->exec('UPDATE event SET people = people + 1 WHERE id = ?', $userId);
-	}
-
-	public function getApprovals($eventId)
-	{
-		$approvals = array();
-		foreach($this->getTable()->where(array('id' => $eventId)) as $approval)
-		{
-			$approvals[] = $approval->related('attendee');
-		}
-		return $approvals;
 	}
 
 	public function delete($id)
 	{
 		return $this->find(array('id' => $id))->delete();
+	}
+
+	public function expireEvents()
+	{
+		foreach($this->findAll() as $event)
+			if($event->date <= new \DateTime())
+				$this->expire($event->id);
+	}
+
+	public function expire($eventId)
+	{
+		return $this->find(array('id' => $eventId))->update(array('expired' => '1'));
 	}
 }

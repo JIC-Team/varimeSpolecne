@@ -1,44 +1,37 @@
 {block content}
+{foreach $events as $event}
+	{if $iterator->first}
 	<b>Moje akce</b>
 	<ul>
-	{foreach $events as $event}
-		{if $event->user_id == $userId}<li><a href="{link Event:view $event->id}">{$event->title}<a/> | </li>{/if}
-	{/foreach}
+	{/if}
+		{if $event->user_id == $userId}<li><a href="{link Event:view $event->id}">{$event->title}</a> | <a href="{link Event:edit $event->id}">Editovat</a></li>{/if}
+	{if $iterator->last}
 	</ul>
+	{/if}
+{/foreach}
+{foreach $events as $event}
+	{if $iterator->first}
 	<b>Cizí akce</b>
 	<ul>
-	{foreach $events as $event}
+	{/if}
 		{if $event->user_id != $userId}
 		<li>
 			<a href="{link Event:view $event->id}">{$event->title}</a>
 			{foreach $attendees as $attendee}
-				{if $attendee->event_id == $event->id}{if $presenter->attendeeCount($attendee->event->id >= $attendee->event->max_people)} | <b>Plno</b>{/if} |
-				{if $attendee->approved == 0}Čeká na schválení
-				{elseif $attendee->approved == 1}Můžete se účastnit
-				{elseif $attendee->approved == 2}Nemůžete se účastnit{/if}
+			{if $attendee->event_id == $event->id}
+				{if $iterator->last && $presenter->attendeeCount($attendee->event->id >= $attendee->event->max_people)} | <b>Plno</b>{/if}
+				{if $attendee->user_id == $user->id}
+					{if $attendee->approved == 0} | Čeká na schválení
+					{elseif $attendee->approved == 1} | Můžete se účastnit
+					{elseif $attendee->approved == 2} | Nemůžete se účastnit
+					{/if}
 				{/if}
+			{/if}
 			{/foreach}
 		</li>
 		{/if}
-	{/foreach}
+	{if $iterator->last}
 	</ul>
-<?php /* {control eventForm}
-<hr />
-<a n:href="Homepage:">Úvodní stránka</a>
-<hr />
-
-<h4>Moje akce</h4>
-<ul n:inner-foreach="$myEvents as $myEvent">
-	<li>{$myEvent->title} - Jídlo: {$myEvent->food} <small>(Vytvořeno uživatelem {$myEvent->ref('user_id')->first_name} {$myEvent->ref('user_id')->last_name|truncate:2,'.'})</small></li>
-</ul>
-
-<h4>Cizí akce</h4>
-<ul n:inner-foreach="$otherEvents as $otherEvent">
-	<li>{$otherEvent->food}</li>
-</ul>
-
-<h4>Účastníci</h4>
-<ul n:inner-foreach="$attendees as $attendee">
-	<li>{$attendee->first_name}</li>
-</ul> */ ?>
+	{/if}
+{/foreach}
 {/block}

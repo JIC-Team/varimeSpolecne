@@ -11,4 +11,9 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
     $this->flashMessage('Uživatel byl odhlášen.');
     $this->redirect('Homepage:');
   }
+
+  public function beforeRender()
+  {
+  	$this->context->eventRepository->expireEvents();
+  }
 }

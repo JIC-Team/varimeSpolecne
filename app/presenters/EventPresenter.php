@@ -21,31 +21,12 @@ class EventPresenter extends BasePresenter
     	$this->events = $this->context->eventRepository->findAll()->order('date DESC');
 	}
 
-	// public function actionDefault($id)
-	// {
-	// 	$this->list = $this->context->eventRepository->findBy(array('id' => $id))->fetch();
-	// 	// if($this->list === FALSE)
-	// 	// 	$this->setView('Homepage:default');
-	// }
-
-	public function actionDefault($id)
-	{
-		if($id === null)
-			$this->events = $this->context->eventRepository->findAll();
-	}
-
 	public function renderDefault()
 	{
 		$this->template->events = $this->events;
 		$this->template->attendees = $this->context->attendeeRepository->findAll();
 		$this->template->userId = $this->user->id;
 	}
-
-	public function actionView($id)
-	{
-		
-	}
-
 	
 	public function renderView($id)
 	{
@@ -59,7 +40,13 @@ class EventPresenter extends BasePresenter
 
 	public function renderEdit($id)
 	{
-		$this->template->event = $this->context->eventRepository->find(array('id' => $id));
+		$this->template->events = $this->context->eventRepository->find(array('id' => $id));
+	}
+
+	public function actionEdit($id)
+	{
+		$this->events = $this->context->eventRepository->find(array('id' => $id));
+		$this->id = $id;
 	}
 
 	public function attendeeCount($id)
@@ -70,6 +57,7 @@ class EventPresenter extends BasePresenter
 			if($attendee->event_id == $id && $attendee->approved == 1)
 				$attendeeCount++;
 		}
+
 		return $attendeeCount;
 	}
 
@@ -80,13 +68,8 @@ class EventPresenter extends BasePresenter
 			if($attendee->user_id == $this->user->id && $attendee->event_id == $id)
 				return true;
 		}
-		return false;
-	}
 
-	public function actionEdit($id)
-	{
-		$this->events = $this->context->eventRepository->find(array('id' => $id));
-		$this->id = $id;
+		return false;
 	}
 
 	public function handleAttend($userId, $eventId)
@@ -123,7 +106,15 @@ class EventPresenter extends BasePresenter
 			$this->flashMessage('Zamítli jste účast pro '.$first.' '.$last);
 		}
 	}
+	
 
+    /**
+     * createComponentEventForm
+     * 
+     * @access public
+     *
+     * @return Nette\UI\Form
+     */
 	public function createComponentEventForm()
 	{
 		$form = new Form();
