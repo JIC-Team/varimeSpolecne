@@ -5,12 +5,18 @@
 		<p>{$event->description}</p>
 		<hr />
 		{if $event->user->id != $user->id}
-			{if $attending}
-				Účastním se!
-			{elseif  $attendeeCount < $event->max_people}
-				<a n:href="attend! $userId, $event->id">Chci se zúčastnit</a>
+			{if $attending !== false}
+				{if $attending == 0}
+					Čeká na schválení.
+				{elseif $attending == 1}
+					Můžete se účastnit!
+				{elseif $attending == 2}
+					Nemůžete se účastnit.
+				{/if}
 			{elseif  $attendeeCount >= $event->max_people}
 				Kapacita plná.
+			{elseif  $attendeeCount < $event->max_people}
+				<a n:href="attend! $userId, $event->id">Chci se zúčastnit</a>
 			{/if}
 		{/if}
 		{if $event->user->id == $user->id}

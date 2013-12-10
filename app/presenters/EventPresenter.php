@@ -64,7 +64,12 @@ class EventPresenter extends BasePresenter
 		foreach($this->context->attendeeRepository->findAll() as $attendee)
 		{
 			if($attendee->user_id == $this->user->id && $attendee->event_id == $id)
-				return true;
+				if($attendee->approved == 0)
+					return 0;
+				else if($attendee->approved == 1)
+					return 1;
+				else if($attendee->approved == 2)
+					return 2;
 		}
 
 		return false;
